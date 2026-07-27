@@ -14,7 +14,7 @@ class AuthController
     // Menampilkan halaman login
     public function index()
     {
-        require_once "app/views/login/login.php";
+        require_once "app/views/login/Login.php";
     }
 
 
