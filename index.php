@@ -14,9 +14,9 @@ switch ($controller) {
         break;
 
 
-    case 'beranda':
-        require_once "app/controllers/BerandaController.php";
-        $controller = new BerandaController();
+    case 'dashboard':
+        require_once "app/controllers/DashboardController.php";
+        $controller = new DashboardController();
         break;
 
 

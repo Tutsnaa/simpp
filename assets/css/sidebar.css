@@ -1,0 +1,102 @@
+/* =======================
+   SIDEBAR
+======================= */
+
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: #2b5748;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* =======================
+   LOGO
+======================= */
+
+.sidebar-title {
+  color: #fff;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* =======================
+   MENU
+======================= */
+
+.menu {
+  padding: 18px 12px;
+}
+
+.menu .nav-item {
+  margin-bottom: 8px;
+}
+
+.menu .nav-link {
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.menu .nav-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.menu .nav-link.active {
+  background: #fff;
+  color: #2b5748;
+  font-weight: 600;
+}
+
+/* =======================
+   MENU BAWAH
+======================= */
+
+.sidebar-bottom {
+  padding: 15px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-bottom .nav-item {
+  margin-bottom: 8px;
+}
+
+.sidebar-bottom .nav-link {
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.sidebar-bottom .nav-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* =======================
+   LOGOUT
+======================= */
+.logout {
+  padding: 18px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.logout .nav-link {
+  background: white;
+  color: #2b5748;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-weight: bold;
+}
+
+.logout .nav-link:hover {
+  color: white;
+}
