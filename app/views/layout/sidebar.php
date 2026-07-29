@@ -1,41 +1,54 @@
+<?php
+$controller = $_GET['controller'] ?? 'dashboard';
+$action = $_GET['action'] ?? 'index';
+?>
 <div class="sidebar">
 
     <!-- Logo -->
-    <div>
+    <img src="<?= !empty($_SESSION['foto']) ? 'assets/img/profil/' . $_SESSION['foto'] : 'assets/img/default.png'; ?>"
+        class="profile-img rounded-circle">
 
+    <div>
         <div class="sidebar-title">
-            SIMPP
+            <span class=" fw-semibold">
+                <?= $_SESSION['nama']; ?>
+            </span>
         </div>
 
         <!-- Menu -->
         <ul class="nav flex-column menu">
 
             <li class="nav-item">
-                <a href="#" class="nav-link active">
+                <a href="index.php?controller=dashboard&action=index"
+                    class="nav-link <?= ($controller == 'dashboard') ? 'active' : ''; ?>">
                     Dashboard
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="index.php?controller=kategori&action=index"
+                    class="nav-link <?= ($controller == 'kategori' && $action == 'index') ? 'active' : ''; ?>">
                     Kategori
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    Produk
+                <a href="index.php?controller=barang&action=index"
+                    class="nav-link <?= ($controller == 'barang'&& $action == 'index') ? 'active' : ''; ?>">
+                    Barang
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="index.php?controller=pemesanan&action=index"
+                    class="nav-link <?= ($controller == 'pemesanan' && $action == 'index') ? 'active' : ''; ?>">
                     Pemesanan
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="index.php?controller=banner&action=index"
+                    class="nav-link <?= ($controller == 'banner' && $action == 'index') ? 'active' : ''; ?>">
                     Banner
                 </a>
             </li>
@@ -48,7 +61,8 @@
     <ul class="nav flex-column sidebar-bottom">
 
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="index.php?controller=pengguna&action=profil"
+                class="nav-link <?= ($controller == 'pengguna' && $action == 'profil') ? 'active' : ''; ?>">
                 Profil
             </a>
         </li>

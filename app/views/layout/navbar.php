@@ -8,7 +8,8 @@
                 <?= $_SESSION['nama']; ?>
             </span>
 
-            <img src="<?= $foto; ?>" alt="Foto Profil" class="profile-img rounded-circle">
+            <img src="<?= !empty($_SESSION['foto']) ? 'assets/img/profil/' . $_SESSION['foto'] : 'assets/img/default.png'; ?>"
+                class="profile-img rounded-circle">
 
         </div>
 

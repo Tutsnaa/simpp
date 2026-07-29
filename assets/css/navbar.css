@@ -1,7 +1,39 @@
+/* =======================
+   NAVBAR
+======================= */
+
+.navbar-custom {
+  height: 70px;
+  padding: 0 25px;
+}
+
+/* Judul Halaman */
+.page-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #2b5748;
+}
+
+/* Nama Pengguna */
+.user-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #444;
+  margin-right: 12px;
+}
+
+/* Foto Profil */
 .profile-img {
-  width: 40px;
-  height: 40px;
-  margin-left: 10px;
+  width: 42px;
+  height: 42px;
   object-fit: cover;
+  border-radius: 50%;
   border: 2px solid #2b5748;
+}
+
+/* Efek Hover Foto */
+.profile-img:hover {
+  transform: scale(1.05);
+  transition: 0.3s;
 }

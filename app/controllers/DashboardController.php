@@ -3,22 +3,19 @@
 class DashboardController
 {
 
-    public function index()
+   public function index()
 {
     if (!isset($_SESSION['id_pengguna'])) {
+
         header("Location: index.php?controller=auth&action=index");
         exit;
-    }
-
-    if ($_SESSION['role'] == 'Pelanggan') {
-
-        require_once "app/views/pelanggan/beranda.php";
-
-    } else {
-
-        require_once "app/views/dashboard/dashboard.php";
 
     }
+
+    $title = "Dashboard";
+    $content = "app/views/dashboard/home.php"; // isi dashboard
+
+    require_once "app/views/dashboard/dashboard.php";
 }
 
 }
