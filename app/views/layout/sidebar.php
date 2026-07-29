@@ -4,11 +4,14 @@ $action = $_GET['action'] ?? 'index';
 ?>
 <div class="sidebar">
 
-    <!-- Logo -->
-    <img src="<?= !empty($_SESSION['foto']) ? 'assets/img/profil/' . $_SESSION['foto'] : 'assets/img/default.png'; ?>"
-        class="profile-img rounded-circle">
+    <!-- Nama Toko -->
+    <div class="title">
+        <h1>SIMPP</h1>
+    </div>
 
     <div>
+        <img src="<?= !empty($_SESSION['foto']) ? 'assets/img/profil/' . $_SESSION['foto'] : 'assets/img/default.png'; ?>"
+            class="profile-img rounded-circle">
         <div class="sidebar-title">
             <span class=" fw-semibold">
                 <?= $_SESSION['nama']; ?>
