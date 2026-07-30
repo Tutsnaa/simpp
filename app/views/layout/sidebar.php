@@ -43,9 +43,9 @@ $action = $_GET['action'] ?? 'index';
             </li>
 
             <li class="nav-item">
-                <a href="index.php?controller=pemesanan&action=index"
-                    class="nav-link <?= ($controller == 'pemesanan' && $action == 'index') ? 'active' : ''; ?>">
-                    Pemesanan
+                <a href="index.php?controller=transaksi&action=index"
+                    class="nav-link <?= ($controller == 'transaksi' && $action == 'index') ? 'active' : ''; ?>">
+                    Transaksi
                 </a>
             </li>
 

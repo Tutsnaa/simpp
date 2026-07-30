@@ -1,35 +1,191 @@
-/* ===========================
-   HALAMAN PROFIL
-=========================== */
+/* =====================================
+   UKURAN HALAMAN PROFIL
+===================================== */
 
-.profile-photo {
-  width: 170px;
-  height: 170px;
-  object-fit: cover;
-  border: 4px solid #2b5748;
-  padding: 4px;
+:root {
+  /* GANTI ANGKA INI SAJA */
+
+  --profile-width: 100%;
+
+  --profile-max-width: 1250px;
+
+  --profile-height: 94vh;
 }
 
-.card-header h4 {
+/* =====================================
+   CARD
+===================================== */
+
+.profile-card {
+  width: var(--profile-width);
+
+  max-width: var(--profile-max-width);
+
+  height: var(--profile-height);
+
+  margin: 20px auto;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+}
+
+.profile-card .card-header {
+  padding: 18px 25px;
+}
+
+.profile-card .card-header h4 {
   color: #2b5748;
+}
+
+.profile-card .card-body {
+  height: calc(var(--profile-height) - 65px);
+  padding: 0;
+}
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.profile-sidebar {
+  border-right: 1px solid #e9ecef;
+
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 25px;
+}
+
+.profile-photo {
+  width: 250px;
+
+  height: 250px;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+
+  border: 3px solid #2b5748;
+
+  margin-bottom: 20px;
+}
+
+.profile-sidebar h5 {
+  color: #2b5748;
+
   font-weight: 600;
 }
 
-.table th {
-  color: #555;
-  width: 180px;
+.profile-sidebar .badge {
+  font-size: 13px;
 }
 
-.table td {
-  color: #222;
+/* =====================================
+   CONTENT
+===================================== */
+
+.profile-content {
+  height: 100%;
+
+  overflow-y: auto;
+
+  padding: 35px;
+}
+
+.section-title {
+  color: #2b5748;
+
+  font-size: 22px;
+
+  font-weight: 600;
+
+  margin-bottom: 30px;
+}
+
+.form-label {
+  font-weight: 600;
+
+  color: #555;
+}
+
+.form-control {
+  height: 46px;
+
+  border-radius: 8px;
+
+  border: 1px solid #dcdcdc;
+
+  background: #fff;
+}
+
+.form-control:read-only {
+  background: #f8f9fa;
+}
+
+textarea.form-control {
+  height: auto;
+
+  resize: none;
+}
+
+/* =====================================
+   BUTTON
+===================================== */
+
+.btn {
+  height: 45px;
+
+  border-radius: 8px;
+
+  font-weight: 500;
 }
 
 .btn-success {
   background: #2b5748;
+
   border-color: #2b5748;
 }
 
 .btn-success:hover {
   background: #214336;
+
   border-color: #214336;
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 991px) {
+  :root {
+    --profile-width: 100%;
+
+    --profile-height: auto;
+  }
+
+  .profile-card {
+    height: auto;
+  }
+
+  .card-body {
+    height: auto;
+  }
+
+  .profile-sidebar {
+    border-right: none;
+
+    border-bottom: 1px solid #e9ecef;
+
+    padding: 25px;
+  }
+
+  .profile-content {
+    padding: 20px;
+  }
 }

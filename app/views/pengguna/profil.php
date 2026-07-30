@@ -1,108 +1,109 @@
-<div class="container-fluid">
+<div class="container-fluid px-0">
 
-    <div class="row justify-content-center">
+    <div class="card shadow-sm border-0 profile-card">
 
-        <div class="col-lg-8">
+        <div class="card-header bg-white">
 
-            <div class="card shadow-sm border-0">
+            <h4 class="mb-0">
+                <i class="fas fa-user-circle me-2"></i>
+                Profil Pengguna
+            </h4>
 
-                <div class="card-header bg-white">
+        </div>
 
-                    <h4 class="mb-0">
-                        Profil Pengguna
-                    </h4>
+        <div class="card-body p-0">
+
+            <div class="row g-0 h-100">
+
+                <!-- Sidebar -->
+
+                <div class="col-lg-3 profile-sidebar">
+
+                    <img src="<?= $foto; ?>" alt="Foto Profil" class="profile-photo">
+
+                    <a href="index.php?controller=pengguna&action=editProfil" class="btn btn-success w-100 mb-2">
+
+                        <i class="fas fa-user-edit me-2"></i>
+                        Edit Profil
+
+                    </a>
+
+                    <a href="index.php?controller=pengguna&action=ubahPassword" class="btn btn-outline-secondary w-100">
+
+                        <i class="fas fa-key me-2"></i>
+                        Ubah Kata Sandi
+
+                    </a>
 
                 </div>
 
-                <div class="card-body">
+                <!-- Content -->
+
+                <div class="col-lg-9 profile-content">
+
+                    <h5 class="section-title">
+                        Informasi Pengguna
+                    </h5>
 
                     <div class="row">
 
-                        <!-- Foto -->
-                        <div class="col-md-4 text-center">
+                        <div class="col-md-6 mb-3">
 
-                            <img src="<?= $foto; ?>" alt="Foto Profil"
-                                class="img-thumbnail rounded-circle profile-photo">
+                            <label class="form-label">
+                                Nama
+                            </label>
 
-                            <h5 class="mt-3 mb-1">
-                                <?= $_SESSION['nama']; ?>
-                            </h5>
-
-                            <span class="badge bg-success">
-                                <?= $_SESSION['role']; ?>
-                            </span>
+                            <input type="text" class="form-control" value="<?= $_SESSION['nama']; ?>" readonly>
 
                         </div>
 
-                        <!-- Data -->
-                        <div class="col-md-8">
+                        <div class="col-md-6 mb-3">
 
-                            <table class="table table-borderless">
+                            <label class="form-label">
+                                Nama Pengguna
+                            </label>
 
-                                <tr>
-                                    <th width="35%">Nama</th>
-                                    <td><?= $_SESSION['nama']; ?></td>
-                                </tr>
+                            <input type="text" class="form-control" value="<?= $pengguna['nama_pengguna']; ?>" readonly>
 
-                                <tr>
-                                    <th>Nama Pengguna</th>
-                                    <td><?= $pengguna['nama_pengguna']; ?></td>
-                                </tr>
+                        </div>
 
-                                <tr>
-                                    <th>Email</th>
-                                    <td><?= $pengguna['email']; ?></td>
-                                </tr>
+                        <div class="col-md-6 mb-3">
 
-                                <tr>
-                                    <th>No. Telepon</th>
-                                    <td><?= $pengguna['no_telepon']; ?></td>
-                                </tr>
+                            <label class="form-label">
+                                Email
+                            </label>
 
-                                <tr>
-                                    <th>Alamat</th>
-                                    <td><?= $pengguna['alamat']; ?></td>
-                                </tr>
+                            <input type="email" class="form-control" value="<?= $pengguna['email']; ?>" readonly>
 
-                                <tr>
-                                    <th>Status</th>
-                                    <td>
+                        </div>
 
-                                        <?php if ($pengguna['status'] == 'Aktif') : ?>
+                        <div class="col-md-6 mb-3">
 
-                                        <span class="badge bg-success">
-                                            Aktif
-                                        </span>
+                            <label class="form-label">
+                                No. Telepon
+                            </label>
 
-                                        <?php else : ?>
+                            <input type="text" class="form-control" value="<?= $pengguna['no_telepon']; ?>" readonly>
 
-                                        <span class="badge bg-danger">
-                                            Tidak Aktif
-                                        </span>
+                        </div>
 
-                                        <?php endif; ?>
+                        <div class="col-12 mb-3">
 
-                                    </td>
-                                </tr>
+                            <label class="form-label">
+                                Alamat
+                            </label>
 
-                            </table>
+                            <textarea class="form-control" rows="4" readonly><?= $pengguna['alamat']; ?></textarea>
 
-                            <div class="mt-4">
+                        </div>
 
-                                <a href="index.php?controller=pengguna&action=editProfil" class="btn btn-success">
+                        <div class="col-md-6">
 
-                                    Edit Profil
+                            <label class="form-label">
+                                Status
+                            </label>
 
-                                </a>
-
-                                <a href="index.php?controller=pengguna&action=ubahPassword"
-                                    class="btn btn-outline-secondary">
-
-                                    Ubah Kata Sandi
-
-                                </a>
-
-                            </div>
+                            <input type="text" class="form-control" value="<?= $pengguna['status']; ?>" readonly>
 
                         </div>
 

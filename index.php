@@ -34,8 +34,8 @@ switch ($controller) {
         break;
 
     case 'pemesanan':
-        require_once "app/controllers/PemesananController.php";
-        $controller = new PemesananController();
+        require_once "app/controllers/TransaksiController.php";
+        $controller = new TransaksiController();
         break;
 
     case 'banner':
