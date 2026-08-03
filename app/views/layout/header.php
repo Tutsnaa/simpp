@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="assets/css/navbar.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="assets/css/beranda.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="assets/css/profil.css?v=<?= time(); ?>">
+
 </head>
 
 <body>

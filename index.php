@@ -33,7 +33,7 @@ switch ($controller) {
         $controller = new BarangController();
         break;
 
-    case 'pemesanan':
+    case 'transaksi':
         require_once "app/controllers/TransaksiController.php";
         $controller = new TransaksiController();
         break;

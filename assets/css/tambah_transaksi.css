@@ -1,0 +1,550 @@
+/* =====================================
+   RESET
+===================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  padding: 0;
+
+  background: #f4f7f5;
+
+  font-family: "Segoe UI", Arial, sans-serif;
+
+  height: 100vh;
+
+  overflow: hidden;
+
+  color: #333;
+}
+
+/* =====================================
+   CONTAINER
+===================================== */
+
+.pos-container {
+  width: 95%;
+
+  max-width: 1600px;
+
+  height: 96vh;
+
+  margin: 2vh auto;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+.pos-header {
+  background: white;
+  min-height: 65px;
+  padding: 10px 18px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 15px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* ICON */
+
+.icon-box {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background: #2b5748;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+/* JENIS TRANSAKSI */
+
+.jenis-transaksi {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.jenis-transaksi label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.jenis-transaksi .form-select {
+  width: 170px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* BUTTON DASHBOARD */
+
+.btn-dashboard {
+  height: 40px;
+
+  padding: 0 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  background: #2b5748;
+
+  color: white;
+
+  border-radius: 10px;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition: 0.3s;
+}
+
+.btn-dashboard:hover {
+  background: #214638;
+
+  color: white;
+}
+
+.btn-dashboard i {
+  font-size: 14px;
+}
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.main-content {
+  display: grid;
+
+  grid-template-columns: 320px minmax(0, 1fr);
+
+  gap: 15px;
+
+  flex: 1;
+
+  min-height: 0;
+
+  width: 100%;
+}
+
+/* =====================================
+   CARD
+===================================== */
+
+.customer-box,
+.cart-box,
+.payment-box {
+  background: white;
+
+  border-radius: 16px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.customer-box,
+.cart-box {
+  height: 100%;
+
+  overflow: hidden;
+}
+
+.box-header {
+  height: 50px;
+
+  padding: 0 18px;
+
+  background: #2b5748;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  font-size: 15px;
+
+  font-weight: 600;
+}
+
+.box-body {
+  padding: 15px;
+}
+
+/* =====================================
+   FORM
+===================================== */
+
+label {
+  display: block;
+
+  margin-top: 10px;
+
+  margin-bottom: 5px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.form-control,
+.form-select {
+  height: 38px;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+
+  border: 1px solid #ddd;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #2b5748;
+
+  box-shadow: 0 0 0 0.15rem rgba(43, 87, 72, 0.15);
+}
+
+textarea.form-control {
+  height: 70px;
+
+  resize: none;
+}
+
+/* =====================================
+   TAMBAH BARANG
+===================================== */
+
+.add-item {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr) 90px 110px;
+
+  gap: 10px;
+
+  margin-bottom: 15px;
+}
+
+.add-item .form-control,
+.add-item .form-select {
+  height: 40px;
+}
+
+.add-item button {
+  background: #2b5748;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-weight: 600;
+}
+
+.add-item button:hover {
+  background: #214437;
+}
+
+/* =====================================
+   CART TABLE
+===================================== */
+
+.cart-box {
+  width: 100%;
+}
+
+.cart-table {
+  width: 100%;
+
+  height: calc(100vh - 350px);
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+  border: 1px solid #eee;
+
+  border-radius: 10px;
+}
+
+.cart-table table {
+  width: 100%;
+
+  margin: 0;
+
+  table-layout: fixed;
+
+  font-size: 14px;
+}
+
+.cart-table thead {
+  position: sticky;
+
+  top: 0;
+
+  z-index: 5;
+}
+
+.cart-table thead th {
+  background: #edf3ef;
+
+  color: #333;
+
+  font-size: 13px;
+
+  padding: 12px 8px;
+
+  white-space: nowrap;
+}
+
+.cart-table td {
+  padding: 10px 8px;
+
+  vertical-align: middle;
+
+  text-align: center;
+}
+
+/* Lebar kolom */
+
+.cart-table th:nth-child(1),
+.cart-table td:nth-child(1) {
+  width: 5%;
+}
+
+.cart-table th:nth-child(2),
+.cart-table td:nth-child(2) {
+  width: 35%;
+
+  text-align: left;
+}
+
+.cart-table th:nth-child(3),
+.cart-table td:nth-child(3) {
+  width: 15%;
+}
+
+.cart-table th:nth-child(4),
+.cart-table td:nth-child(4) {
+  width: 18%;
+}
+
+.cart-table th:nth-child(5),
+.cart-table td:nth-child(5) {
+  width: 17%;
+}
+
+.cart-table th:nth-child(6),
+.cart-table td:nth-child(6) {
+  width: 10%;
+}
+
+/* scrollbar */
+
+.cart-table::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart-table::-webkit-scrollbar-thumb {
+  background: #2b5748;
+
+  border-radius: 10px;
+}
+
+.btn-tambah {
+  background: #2b5748;
+  color: white !important;
+  border: none;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 8px 18px;
+}
+
+.btn-tambah i {
+  color: white;
+  margin-right: 5px;
+}
+
+.btn-tambah:hover {
+  background: #214638;
+  color: white !important;
+}
+/* =====================================
+   QTY CONTROL
+===================================== */
+
+.qty-control {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.qty-control input {
+  width: 45px;
+
+  height: 32px;
+
+  border-radius: 7px;
+
+  border: 1px solid #ddd;
+
+  text-align: center;
+
+  font-size: 14px;
+}
+
+.qty-control button {
+  width: 30px;
+
+  height: 30px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #2b5748;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 12px;
+}
+
+.qty-control button:hover {
+  background: #214437;
+}
+
+/* =====================================
+   PAYMENT
+===================================== */
+
+.payment-box {
+  margin-top: 15px;
+
+  padding: 15px;
+
+  display: grid;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 12px;
+}
+
+.payment-box label {
+  margin-top: 0;
+}
+
+.payment-box .form-control,
+.payment-box .form-select {
+  height: 40px;
+}
+
+/* =====================================
+   BUTTON SIMPAN
+===================================== */
+
+.btn-save {
+  margin-top: 12px;
+
+  height: 48px;
+
+  width: 100%;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #2b5748;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.btn-save:hover {
+  background: #214437;
+
+  transform: translateY(-2px);
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 1200px) {
+  .main-content {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+
+  .payment-box {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  body {
+    overflow: auto;
+  }
+
+  .pos-container {
+    height: auto;
+  }
+
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-box {
+    height: auto;
+  }
+
+  .payment-box {
+    grid-template-columns: 1fr;
+  }
+}
