@@ -12,7 +12,11 @@ class KategoriModel
         $this->db = $database->connect();
     }
 
-    // Menampilkan seluruh kategori
+    /* ==========================================================
+     * DATA KATEGORI
+     * ========================================================== */
+
+    // Menampilkan seluruh data kategori
     public function getAll()
     {
         $query = $this->db->prepare("
@@ -26,7 +30,7 @@ class KategoriModel
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Menampilkan kategori berdasarkan ID
+    // Menampilkan satu data kategori berdasarkan ID
     public function getById($id_kategori)
     {
         $query = $this->db->prepare("
@@ -40,6 +44,10 @@ class KategoriModel
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
+
+    /* ==========================================================
+     * CRUD START
+     * ========================================================== */
 
     // Menambah kategori
     public function create($data)
@@ -86,4 +94,8 @@ class KategoriModel
             ":id_kategori" => $id_kategori
         ]);
     }
+
+    /* ==========================================================
+     * CRUD END
+     * ========================================================== */
 }

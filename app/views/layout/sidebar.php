@@ -6,7 +6,7 @@ $action = $_GET['action'] ?? 'index';
 
     <!-- Nama Toko -->
     <div class="title">
-        <h1>SIMPP</h1>
+        <h1>SIP</h1>
     </div>
 
     <div>

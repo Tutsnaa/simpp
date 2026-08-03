@@ -12,7 +12,11 @@ class BarangModel
         $this->db = $database->connect();
     }
 
-    // Menampilkan seluruh barang
+    /* ==========================================================
+     * DATA BARANG
+     * ========================================================== */
+
+    // Menampilkan seluruh data barang
     public function getAll()
     {
         $query = $this->db->prepare("
@@ -30,7 +34,7 @@ class BarangModel
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Menampilkan satu barang
+    // Menampilkan satu data barang berdasarkan ID
     public function getById($id_barang)
     {
         $query = $this->db->prepare("
@@ -44,6 +48,10 @@ class BarangModel
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
+
+    /* ==========================================================
+     * CRUD START
+     * ========================================================== */
 
     // Menambah barang
     public function create($data)
@@ -102,7 +110,30 @@ class BarangModel
         ");
 
         return $query->execute([
-            ':id_barang' => $id_barang
+            ":id_barang" => $id_barang
         ]);
+    }
+
+    /* ==========================================================
+     * CRUD END
+     * ========================================================== */
+
+
+    /* ==========================================================
+     * DATA KATEGORI
+     * ========================================================== */
+
+    // Menampilkan seluruh kategori
+    public function getKategori()
+    {
+        $query = $this->db->prepare("
+            SELECT *
+            FROM kategori
+            ORDER BY nama_kategori ASC
+        ");
+
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 }

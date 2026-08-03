@@ -11,10 +11,14 @@ class KategoriController
         $this->kategoriModel = new KategoriModel();
     }
 
+    /* ==========================================================
+     * HALAMAN
+     * ========================================================== */
+
     // Menampilkan data kategori
     public function index()
     {
-        if (!isset($_SESSION['id_pengguna'])) {
+        if (!isset($_SESSION["id_pengguna"])) {
 
             header("Location: index.php?controller=auth&action=index");
             exit;
@@ -29,60 +33,68 @@ class KategoriController
         require_once "app/views/dashboard/dashboard.php";
     }
 
+    /* ==========================================================
+     * CRUD START
+     * ========================================================== */
+
     // Menambah kategori
     public function create()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $data = [
+
                 "nama_kategori" => $_POST["nama_kategori"],
-                "keterangan"    => $_POST["keterangan"]
+
+                "keterangan" => $_POST["keterangan"]
+
             ];
 
             $this->kategoriModel->create($data);
 
             header("Location: index.php?controller=kategori&action=index");
             exit;
+
         }
     }
 
-    // Menampilkan form edit
-    public function edit()
-    {
-        $id_kategori = $_GET["id"];
-
-        $kategori = $this->kategoriModel->getById($id_kategori);
-
-        $title = "Edit Kategori";
-        $content = "app/views/kategori/edit.php";
-
-        require_once "app/views/dashboard/dashboard.php";
-    }
-
-    // Update kategori
+    // Mengubah kategori
     public function update()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $data = [
-                "id_kategori"   => $_POST["id_kategori"],
+
+                "id_kategori" => $_POST["id_kategori"],
+
                 "nama_kategori" => $_POST["nama_kategori"],
-                "keterangan"    => $_POST["keterangan"]
+
+                "keterangan" => $_POST["keterangan"]
+
             ];
 
             $this->kategoriModel->update($data);
 
             header("Location: index.php?controller=kategori&action=index");
             exit;
+
         }
     }
 
-    // Hapus kategori
+    // Menghapus kategori
     public function delete()
     {
-        $this->kategoriModel->delete($_GET["id"]);
+        if (isset($_GET["id"])) {
+
+            $this->kategoriModel->delete($_GET["id"]);
+
+        }
 
         header("Location: index.php?controller=kategori&action=index");
         exit;
     }
+
+    /* ==========================================================
+     * CRUD END
+     * ========================================================== */
 }

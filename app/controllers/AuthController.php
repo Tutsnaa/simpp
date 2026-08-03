@@ -27,20 +27,23 @@ class AuthController
 
             $pengguna = $this->penggunaModel->getByNamaPengguna($nama_pengguna);
 
-            if ($pengguna && $kata_sandi == $pengguna["kata_sandi"]) {
+            if ($pengguna && password_verify($kata_sandi, $pengguna["kata_sandi"])) {
 
-                // Session sudah dimulai di index.php,
-                // jadi session_start() di sini tidak perlu.
+    $_SESSION["id_pengguna"] = $pengguna["id_pengguna"];
+    $_SESSION["nama"]        = $pengguna["nama"];
+    $_SESSION["role"]        = $pengguna["role"];
+    $_SESSION["foto"]        = $pengguna["foto"];
 
-                $_SESSION["id_pengguna"] = $pengguna["id_pengguna"];
-                $_SESSION["nama"]        = $pengguna["nama"];
-                $_SESSION["role"]        = $pengguna["role"];
-                $_SESSION["foto"]        = $pengguna["foto"];
+    header("Location: index.php?controller=dashboard&action=index");
+    exit;
 
-                header("Location: index.php?controller=dashboard&action=index");
-                exit;
+} else {
 
-            }
+    echo "<script>
+            alert('Nama pengguna atau kata sandi salah.');
+            window.location='index.php?controller=auth&action=index';
+          </script>";
+}
         }
     }
 
