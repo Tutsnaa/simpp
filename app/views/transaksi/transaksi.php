@@ -1,375 +1,113 @@
 <div class="container-fluid">
-
     <!-- HEADER -->
     <div class="card shadow-sm border-0 mb-3">
-
         <div class="card-body d-flex justify-content-between align-items-center">
-
             <div>
                 <h4 class="mb-1 text-success">
-
-                    <i class="fas fa-cash-register me-2"></i>
-
-                    Transaksi
-
+                    <i class="fas fa-cash-register me-2"></i> Transaksi
                 </h4>
-
                 <p class="text-muted mb-0">
                     Kelola transaksi penjualan dan pemesanan toko
                 </p>
-
             </div>
-
-
             <a href="index.php?controller=transaksi&action=tambah" class="btn btn-success">
-
-
-                <i class="fas fa-plus me-2"></i>
-
-                Transaksi Baru
-
-
+                <i class="fas fa-plus me-2"></i> Transaksi Baru
             </a>
-
-
         </div>
-
     </div>
-
-
-
-
 
     <!-- TABLE TRANSAKSI -->
-
     <div class="card shadow-sm border-0">
-
-
         <div class="card-header bg-white">
-
             <h5 class="mb-0">
-
-                <i class="fas fa-list me-2"></i>
-
-                Data Transaksi
-
+                <i class="fas fa-list me-2"></i> Data Transaksi
             </h5>
-
         </div>
-
-
 
         <div class="card-body">
-
-
             <div class="table-responsive">
-
-
                 <table class="table table-hover align-middle">
-
-
                     <thead class="table-success">
-
-
                         <tr>
-
                             <th>No</th>
-
                             <th>ID Transaksi</th>
-
                             <th>Pelanggan</th>
-
                             <th>Jenis</th>
-
                             <th>Total</th>
-
                             <th>Pembayaran</th>
-
                             <th>Status</th>
-
                             <th>Tanggal</th>
-
-                            <th width="180">
-                                Aksi
-                            </th>
-
+                            <th width="180">Aksi</th>
                         </tr>
-
-
                     </thead>
-
-
-
                     <tbody>
-
-
-                        <?php if(!empty($transaksi)): ?>
-
-
-                        <?php $no=1; ?>
-
-
-                        <?php foreach($transaksi as $row): ?>
-
-
+                        <?php if (!empty($transaksi)): ?>
+                        <?php $no = 1; ?>
+                        <?php foreach ($transaksi as $row): ?>
                         <tr>
-
-
+                            <td><?= $no++; ?></td>
+                            <td>TR<?= str_pad($row['id_transaksi'], 5, "0", STR_PAD_LEFT); ?></td>
                             <td>
-                                <?= $no++; ?>
+                                <?= $row['nama_pelanggan'] ?? '-'; ?><br>
+                                <small class="text-muted"><?= $row['no_telepon']; ?></small>
                             </td>
-
-
                             <td>
-
-                                TR<?= str_pad(
-                                    $row['id_transaksi'],
-                                    5,
-                                    "0",
-                                    STR_PAD_LEFT
-                                ); ?>
-
-                            </td>
-
-
-
-                            <td>
-
-                                <?= $row['nama_pelanggan'] ?? '-'; ?>
-
-                                <br>
-
-                                <small class="text-muted">
-
-                                    <?= $row['no_telepon']; ?>
-
-                                </small>
-
-
-                            </td>
-
-
-
-                            <td>
-
-
-                                <?php if($row['jenis_transaksi']=="Penjualan"): ?>
-
-                                <span class="badge bg-primary">
-
-                                    Penjualan
-
-                                </span>
-
-
+                                <?php if ($row['jenis_transaksi'] == "Penjualan"): ?>
+                                <span class="badge bg-primary">Penjualan</span>
                                 <?php else: ?>
-
-
-                                <span class="badge bg-warning text-dark">
-
-                                    Pemesanan
-
-                                </span>
-
-
+                                <span class="badge bg-warning text-dark">Pemesanan</span>
                                 <?php endif; ?>
-
-
                             </td>
-
-
-
+                            <td>Rp <?= number_format($row['total'], 0, ",", "."); ?></td>
                             <td>
-
-                                Rp <?= number_format(
-                                    $row['total'],
-                                    0,
-                                    ",",
-                                    "."
-                                ); ?>
-
-
+                                <span class="badge bg-info text-dark"><?= $row['status_pembayaran']; ?></span>
                             </td>
-
-
-
-
                             <td>
-
-
-                                <span class="badge bg-info text-dark">
-
-                                    <?= $row['status_pembayaran']; ?>
-
-                                </span>
-
-
-                            </td>
-
-
-
-
-                            <td>
-
-
-                                <?php if($row['status_transaksi']=="Selesai"): ?>
-
-
-                                <span class="badge bg-success">
-
-                                    Selesai
-
-                                </span>
-
-
-                                <?php elseif($row['status_transaksi']=="Dibatalkan"): ?>
-
-
-                                <span class="badge bg-danger">
-
-                                    Dibatalkan
-
-                                </span>
-
-
+                                <?php if ($row['status_transaksi'] == "Selesai"): ?>
+                                <span class="badge bg-success">Selesai</span>
+                                <?php elseif ($row['status_transaksi'] == "Dibatalkan"): ?>
+                                <span class="badge bg-danger">Dibatalkan</span>
                                 <?php else: ?>
-
-
-                                <span class="badge bg-secondary">
-
-                                    <?= $row['status_transaksi']; ?>
-
-                                </span>
-
-
+                                <span class="badge bg-secondary"><?= $row['status_transaksi']; ?></span>
                                 <?php endif; ?>
-
-
                             </td>
-
-
-
-
+                            <td><?= date("d-m-Y", strtotime($row['tanggal_dibuat'])); ?></td>
                             <td>
-
-                                <?= date(
-                                    "d-m-Y",
-                                    strtotime(
-                                        $row['tanggal_dibuat']
-                                    )
-                                ); ?>
-
-
-                            </td>
-
-
-
-
-                            <td>
-
-
                                 <!-- DETAIL -->
-
                                 <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal"
                                     data-bs-target="#modalDetail<?= $row['id_transaksi']; ?>">
-
                                     <i class="fas fa-eye"></i>
-
                                 </button>
-
-
-
 
                                 <!-- PELUNASAN -->
-
-                                <?php if($row['status_pembayaran']=="DP"): ?>
-
-
+                                <?php if ($row['status_pembayaran'] == "DP"): ?>
                                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
                                     data-bs-target="#modalPelunasan<?= $row['id_transaksi']; ?>">
-
-
                                     <i class="fas fa-money-bill"></i>
-
-
                                 </button>
-
-
                                 <?php endif; ?>
 
-
-
-
-
                                 <!-- HAPUS -->
-
-                                <a href="
-                                index.php?controller=transaksi&action=delete&id=<?= $row['id_transaksi']; ?>" onclick="
-                                return confirm('Hapus transaksi ini?')
-                                " class="btn btn-sm btn-danger">
-
-
+                                <a href="index.php?controller=transaksi&action=delete&id=<?= $row['id_transaksi']; ?>"
+                                    onclick="return confirm('Hapus transaksi ini?')" class="btn btn-sm btn-danger">
                                     <i class="fas fa-trash"></i>
-
-
                                 </a>
-
-
                             </td>
-
-
                         </tr>
-
-
-
                         <?php endforeach; ?>
-
-
                         <?php else: ?>
-
-
                         <tr>
-
-                            <td colspan="9" class="text-center">
-
-                                Belum ada transaksi
-
-                            </td>
-
-
+                            <td colspan="9" class="text-center">Belum ada transaksi</td>
                         </tr>
-
-
                         <?php endif; ?>
-
-
                     </tbody>
-
-
                 </table>
-
-
             </div>
-
-
         </div>
-
-
     </div>
-
-
 </div>
 
-
-
-
-
-<!-- MODAL -->
-
+<!-- MODAL & SCRIPT -->
 <?php require "modal_detail.php"; ?>
-
-
 <?php require "modal_pelunasan.php"; ?>
-
-
 <?php require "script.php"; ?>

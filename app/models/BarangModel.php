@@ -18,21 +18,17 @@ class BarangModel
 
     // Menampilkan seluruh data barang
     public function getAll()
-    {
-        $query = $this->db->prepare("
-            SELECT
-                barang.*,
-                kategori.nama_kategori
-            FROM barang
-            INNER JOIN kategori
-                ON barang.id_kategori = kategori.id_kategori
-            ORDER BY barang.id_barang DESC
-        ");
-
-        $query->execute();
-
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
+{
+    $query = "SELECT barang.*, kategori.nama_kategori 
+              FROM barang 
+              LEFT JOIN kategori ON barang.id_kategori = kategori.id_kategori 
+              ORDER BY (CASE WHEN barang.status = 'Habis' OR barang.jumlah <= 0 THEN 0 ELSE 1 END) ASC, 
+                       barang.id_barang DESC";
+    
+    $stmt = $this->db->prepare($query);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
     // Menampilkan satu data barang berdasarkan ID
     public function getById($id_barang)
