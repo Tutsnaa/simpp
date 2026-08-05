@@ -186,11 +186,55 @@ class TransaksiModel
  */
 public function getTotalOmset()
 {
-    $sql = "SELECT SUM(jumlah_dibayar) AS total FROM transaksi WHERE status_transaksi != 'Dibatalkan'";
+    // Menggunakan SUM(total) agar sesuai dengan harga transaksi (175)
+    $sql = "SELECT SUM(total) AS total FROM transaksi WHERE status_transaksi != 'Dibatalkan'";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $result['total'] ?? 0;
+}
+
+/**
+ * Hitung total jumlah transaksi (banyaknya transaksi yang terjadi)
+ */
+public function getTotalTransaksi()
+{
+    $sql = "SELECT COUNT(*) AS total FROM transaksi WHERE status_transaksi != 'Dibatalkan'";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result['total'] ?? 0;
+}
+
+/**
+ * Hitung total transaksi dengan jenis 'Pemesanan'
+ */
+public function getTotalPemesanan()
+{
+    $sql = "SELECT COUNT(*) AS total 
+            FROM transaksi 
+            WHERE jenis_transaksi = 'Pemesanan' 
+              AND status_transaksi != 'Dibatalkan'";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result['total'] ?? 0;
+}
+
+/**
+ * Ambil 5 data transaksi terbaru untuk Dashboard
+ */
+public function getTransaksiTerbaru($limit = 5)
+{
+    $sql = "SELECT * FROM transaksi ORDER BY id_transaksi DESC LIMIT :limit";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 }

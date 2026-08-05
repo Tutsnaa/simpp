@@ -38,7 +38,9 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted small fw-bold text-uppercase">Total Transaksi</span>
-                            <h4 class="mb-0 fw-bold mt-1 text-primary">45</h4>
+                            <h4 class="mb-0 fw-bold mt-1 text-primary">
+                                <?= number_format($totalTransaksi ?? 0, 0, ',', '.'); ?>
+                            </h4>
                         </div>
                         <div class="p-3 rounded-circle bg-primary bg-opacity-10 text-primary">
                             <i class="fas fa-shopping-cart fa-2x"></i>
@@ -55,7 +57,9 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted small fw-bold text-uppercase">Total Jenis Produk</span>
-                            <h4 class="mb-0 fw-bold mt-1 text-info">120</h4>
+                            <h4 class="mb-0 fw-bold mt-1 text-info">
+                                <?= number_format($totalBarang ?? 0, 0, ',', '.'); ?>
+                            </h4>
                         </div>
                         <div class="p-3 rounded-circle bg-info bg-opacity-10 text-info">
                             <i class="fas fa-box fa-2x"></i>
@@ -65,14 +69,16 @@
             </div>
         </div>
 
-        <!-- Card 4: Sisa Pembayaran (Piutang) -->
+        <!-- Card 4: Total Pemesanan -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="card border-0 shadow-sm h-100 border-start border-4 border-warning">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <span class="text-muted small fw-bold text-uppercase">Piutang Belum Lunas</span>
-                            <h4 class="mb-0 fw-bold mt-1 text-warning">Rp 250.000</h4>
+                            <span class="text-muted small fw-bold text-uppercase">Total Pemesanan</span>
+                            <h4 class="mb-0 fw-bold mt-1 text-info">
+                                <?= number_format($totalPemesanan ?? 0, 0, ',', '.'); ?>
+                            </h4>
                         </div>
                         <div class="p-3 rounded-circle bg-warning bg-opacity-10 text-warning">
                             <i class="fas fa-hand-holding-usd fa-2x"></i>
@@ -93,7 +99,7 @@
                     <h6 class="m-0 fw-bold" style="color: #2b5748;">
                         <i class="fas fa-history me-2"></i>Transaksi Terbaru
                     </h6>
-                    <a href="index.php?page=transaksi" class="btn btn-sm text-white"
+                    <a href="index.php?controller=transaksi&action=index" class="btn btn-sm text-white"
                         style="background-color: #2b5748;">Lihat Semua</a>
                 </div>
                 <div class="card-body p-0">
@@ -104,29 +110,37 @@
                                     <th>Kode</th>
                                     <th>Pelanggan</th>
                                     <th>Total</th>
-                                    <th>Status</th>
+                                    <th>Status Bayar</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Contoh Data Statis (Nanti di-loop dari DB) -->
+                                <?php if (!empty($transaksiTerbaru)): ?>
+                                <?php foreach ($transaksiTerbaru as $row): ?>
                                 <tr>
-                                    <td><span class="fw-bold">#TR00012</span></td>
-                                    <td>Ahmad Budi</td>
-                                    <td>Rp 150.000</td>
-                                    <td><span class="badge bg-success">Lunas</span></td>
+                                    <td>
+                                        <span class="fw-bold">
+                                            TR<?= str_pad($row['id_transaksi'], 5, "0", STR_PAD_LEFT); ?>
+                                        </span>
+                                    </td>
+                                    <td><?= htmlspecialchars($row['nama_pelanggan'] ?? 'Umum'); ?></td>
+                                    <td>Rp <?= number_format($row['total'], 0, ",", "."); ?></td>
+                                    <td>
+                                        <?php if ($row['status_pembayaran'] == "Lunas"): ?>
+                                        <span class="badge bg-success">Lunas</span>
+                                        <?php elseif ($row['status_pembayaran'] == "DP"): ?>
+                                        <span class="badge bg-warning text-dark">DP</span>
+                                        <?php else: ?>
+                                        <span
+                                            class="badge bg-danger"><?= htmlspecialchars($row['status_pembayaran']); ?></span>
+                                        <?php endif; ?>
+                                    </td>
                                 </tr>
+                                <?php endforeach; ?>
+                                <?php else: ?>
                                 <tr>
-                                    <td><span class="fw-bold">#TR00011</span></td>
-                                    <td>Siti Rahma</td>
-                                    <td>Rp 85.000</td>
-                                    <td><span class="badge bg-warning text-dark">Belum Lunas</span></td>
+                                    <td colspan="4" class="text-center text-muted py-3">Belum ada transaksi terbaru</td>
                                 </tr>
-                                <tr>
-                                    <td><span class="fw-bold">#TR00010</span></td>
-                                    <td>Umum</td>
-                                    <td>Rp 45.000</td>
-                                    <td><span class="badge bg-success">Lunas</span></td>
-                                </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -142,29 +156,34 @@
                         <i class="fas fa-exclamation-triangle me-2"></i>Peringatan Stok Menipis
                     </h6>
                 </div>
-                <div class="card-body p-0">
+
+                <!-- Tambahkan style max-height dan overflow-y: auto di sini -->
+                <div class="card-body p-0" style="max-height: 350px; overflow-y: auto;">
                     <ul class="list-group list-group-flush">
+                        <?php if (!empty($stokMenipis)): ?>
+                        <?php foreach ($stokMenipis as $item): ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                             <div>
-                                <h6 class="my-0 fw-bold">Kertas HVS A4</h6>
-                                <small class="text-muted">Kategori: ATK</small>
+                                <h6 class="my-0 fw-bold"><?= htmlspecialchars($item['nama_barang']); ?></h6>
+                                <small class="text-muted">
+                                    Kategori: <?= htmlspecialchars($item['nama_kategori'] ?? 'Umum'); ?>
+                                </small>
                             </div>
-                            <span class="badge bg-danger rounded-pill">Sisa 2 Pcs</span>
+                            <?php if ($item['jumlah'] <= 0): ?>
+                            <span class="badge bg-danger rounded-pill">Habis</span>
+                            <?php elseif ($item['jumlah'] <= 3): ?>
+                            <span class="badge bg-danger rounded-pill">Sisa <?= $item['jumlah']; ?> Pcs</span>
+                            <?php else: ?>
+                            <span class="badge bg-warning text-dark rounded-pill">Sisa <?= $item['jumlah']; ?>
+                                Pcs</span>
+                            <?php endif; ?>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <div>
-                                <h6 class="my-0 fw-bold">Tinta Printer Hitam</h6>
-                                <small class="text-muted">Kategori: Tinta</small>
-                            </div>
-                            <span class="badge bg-danger rounded-pill">Sisa 1 Pcs</span>
+                        <?php endforeach; ?>
+                        <?php else: ?>
+                        <li class="list-group-item text-center text-muted py-4">
+                            <i class="fas fa-check-circle text-success me-1"></i> Semua stok aman
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                            <div>
-                                <h6 class="my-0 fw-bold">Map Folio Bening</h6>
-                                <small class="text-muted">Kategori: ATK</small>
-                            </div>
-                            <span class="badge bg-warning text-dark rounded-pill">Sisa 5 Pcs</span>
-                        </li>
+                        <?php endif; ?>
                     </ul>
                 </div>
             </div>

@@ -132,4 +132,35 @@ class BarangModel
 
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+ * Hitung total jenis/item barang
+ */
+public function getTotalBarang()
+{
+    $query = "SELECT COUNT(*) AS total FROM barang";
+    
+    $stmt = $this->db->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result['total'] ?? 0;
+}
+
+/**
+ * Ambil daftar barang dengan stok menipis (0 - 10 pcs)
+ */
+public function getStokMenipis()
+{
+    $query = "SELECT barang.*, kategori.nama_kategori 
+              FROM barang 
+              LEFT JOIN kategori ON barang.id_kategori = kategori.id_kategori 
+              WHERE barang.jumlah <= 10 
+              ORDER BY barang.jumlah ASC";
+              
+    $stmt = $this->db->prepare($query);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
