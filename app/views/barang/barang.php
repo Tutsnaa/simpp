@@ -19,20 +19,22 @@
                 <input type="text" id="searchBarang" class="form-control" placeholder="Cari barang...">
             </div>
             <div class="col-lg-3">
-                <select class="form-select">
+                <!-- Filter Kategori -->
+                <select id="filterKategori" class="form-select">
                     <option value="">Semua Kategori</option>
                     <?php foreach($kategori as $k): ?>
-                    <option value="<?= $k['nama_kategori']; ?>">
-                        <?= $k['nama_kategori']; ?>
+                    <option value="<?= htmlspecialchars($k['nama_kategori']); ?>">
+                        <?= htmlspecialchars($k['nama_kategori']); ?>
                     </option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="col-lg-3">
-                <select class="form-select">
-                    <option>Semua Status</option>
-                    <option>Tersedia</option>
-                    <option>Habis</option>
+                <!-- Filter Status -->
+                <select id="filterStatus" class="form-select">
+                    <option value="">Semua Status</option> <!-- Pastikan value="" -->
+                    <option value="Tersedia">Tersedia</option>
+                    <option value="Habis">Habis</option>
                 </select>
             </div>
             <div class="col-lg-2 text-end">
@@ -51,12 +53,12 @@
         <table class="table table-hover align-middle mb-0" id="tableBarang">
             <!-- PENTING: Penambahan sticky-top agar header tidak ikut ter-scroll -->
             <thead class="sticky-top table-success">
-                <tr>
-                    <th>Foto</th>
+                <tr class="text-center">
+                    <th>Kode Barang</th>
                     <th>Nama Barang</th>
                     <th>Kategori</th>
                     <th>Stok</th>
-                    <th>Harga Beli</th>
+
                     <th>Harga Jual</th>
                     <th>Status</th>
                     <th class="text-center">Aksi</th>
@@ -65,20 +67,13 @@
             <tbody>
                 <?php foreach($barang as $row): ?>
                 <tr>
-                    <td>
-                        <?php if($row['foto']) : ?>
-                        <img src="assets/img/barang/<?= $row['foto']; ?>" width="60" height="60" class="rounded border"
-                            style="object-fit:cover;">
-                        <?php else : ?>
-                        <img src="assets/img/no-image.png" width="60" class="rounded border">
-                        <?php endif; ?>
-                    </td>
+                    <td class="fw-bold text-center"><?= str_pad($row['id_barang'], 5, "0", STR_PAD_LEFT); ?></td>
                     <td><strong><?= $row['nama_barang']; ?></strong></td>
                     <td><?= $row['nama_kategori']; ?></td>
-                    <td><?= $row['jumlah']; ?></td>
-                    <td>Rp <?= number_format($row['harga_beli'],0,",","."); ?></td>
-                    <td>Rp <?= number_format($row['harga_jual'],0,",","."); ?></td>
-                    <td>
+                    <td class="text-center"><?= $row['jumlah']; ?></td>
+
+                    <td class="text-center">Rp <?= number_format($row['harga_jual'],0,",","."); ?></td>
+                    <td class="text-center">
                         <?php if($row['status']=="Tersedia"): ?>
                         <span class="badge bg-success">Tersedia</span>
                         <?php else: ?>
@@ -86,12 +81,20 @@
                         <?php endif; ?>
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#edit<?= $row['id_barang']; ?>">
+                        <!-- Tombol Detail -->
+                        <button class="btn btn-info btn-sm text-white" data-bs-toggle="modal"
+                            data-bs-target="#modalDetail<?= $row['id_barang']; ?>" title="Detail Barang">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <!-- Tombol Edit -->
+                        <button class="btn btn-warning btn-sm text-dark" data-bs-toggle="modal"
+                            data-bs-target="#edit<?= $row['id_barang']; ?>" title="Edit Barang">
                             <i class="bi bi-pencil"></i>
                         </button>
+                        <!-- Tombol Hapus -->
                         <a href="index.php?controller=barang&action=delete&id=<?= $row['id_barang']; ?>"
-                            class="btn btn-danger btn-sm" onclick="return confirm('Hapus barang?')">
+                            class="btn btn-danger btn-sm" onclick="return confirm('Hapus barang ini?')"
+                            title="Hapus Barang">
                             <i class="bi bi-trash"></i>
                         </a>
                     </td>
@@ -102,6 +105,8 @@
     </div>
 </div>
 
+<!-- MODAL & SCRIPT -->
 <?php require "modal_tambah.php"; ?>
 <?php require "modal_ubah.php"; ?>
+<?php require "modal_detail.php"; ?>
 <?php require "script.php"; ?>

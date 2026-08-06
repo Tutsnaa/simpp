@@ -181,31 +181,6 @@
 
                             <!-- Status -->
 
-                            <div class="mb-3">
-
-                                <label class="form-label fw-semibold">
-
-                                    Status Barang
-
-                                </label>
-
-                                <select class="form-select" name="status" required>
-
-                                    <option value="Tersedia">
-
-                                        Tersedia
-
-                                    </option>
-
-                                    <option value="Habis">
-
-                                        Habis
-
-                                    </option>
-
-                                </select>
-
-                            </div>
 
                             <!-- Card Ringkasan -->
 

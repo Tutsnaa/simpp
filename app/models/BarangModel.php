@@ -52,6 +52,9 @@ class BarangModel
     // Menambah barang
     public function create($data)
     {
+        // Otomatis tentukan status berdasarkan jumlah
+        $data['status'] = ($data['jumlah'] <= 0) ? 'Habis' : 'Tersedia';
+
         $query = $this->db->prepare("
             INSERT INTO barang
             (
@@ -81,6 +84,9 @@ class BarangModel
     // Mengubah barang
     public function update($data)
     {
+        // Otomatis tentukan status berdasarkan jumlah
+        $data['status'] = ($data['jumlah'] <= 0) ? 'Habis' : 'Tersedia';
+
         $query = $this->db->prepare("
             UPDATE barang
             SET

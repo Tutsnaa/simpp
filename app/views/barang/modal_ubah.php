@@ -177,31 +177,6 @@
 
                             </div>
 
-                            <div class="mb-3">
-
-                                <label class="form-label fw-semibold">
-
-                                    Status Barang
-
-                                </label>
-
-                                <select class="form-select" name="status" required>
-
-                                    <option value="Tersedia" <?= ($row['status'] == "Tersedia") ? "selected" : ""; ?>>
-
-                                        Tersedia
-
-                                    </option>
-
-                                    <option value="Habis" <?= ($row['status'] == "Habis") ? "selected" : ""; ?>>
-
-                                        Habis
-
-                                    </option>
-
-                                </select>
-
-                            </div>
 
                             <div class="card bg-light border-0 mt-4">
 
