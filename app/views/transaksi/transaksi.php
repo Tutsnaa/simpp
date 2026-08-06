@@ -10,6 +10,8 @@
                     Kelola transaksi penjualan dan pemesanan toko
                 </p>
             </div>
+
+
             <a href="index.php?controller=transaksi&action=tambah" class="btn-tambah">
                 <span class="material-symbols-outlined">add_circle</span>Transaksi Baru
             </a>
@@ -19,8 +21,14 @@
     <!-- TABLE TRANSAKSI -->
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white">
-            <h5 class="mb-0">
-                <i class="fas fa-list me-2"></i> Data Transaksi
+            <h5 class="mb-0 d-flex align-items-center gap-3">
+                <div>
+                    <i class="fas fa-list me-2"></i> Data Transaksi
+                </div>
+                <a href="index.php?controller=transaksi&action=cetakLaporanPdf" target="_blank"
+                    class="btn btn-sm text-white" style="background-color: #2b5748;">
+                    <i class="fas fa-file-pdf me-1"></i> Unduh PDF
+                </a>
             </h5>
         </div>
 
