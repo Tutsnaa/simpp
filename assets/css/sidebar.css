@@ -5,7 +5,6 @@
 .sidebar {
   width: 260px;
   min-height: 100vh;
-  background: #2b5748;
   display: flex;
   flex-direction: column;
   padding: 25px 20px;
@@ -16,7 +15,7 @@
 ======================= */
 
 .sidebar .title {
-  color: #ffffff;
+  color: var(--main-text-color);
   font-size: 18px;
   font-weight: 600;
   text-align: center;
@@ -28,14 +27,14 @@
   height: 90px;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid #ffffff;
+  border: 3px solid var(--main-text-color);
   margin: 0 auto 10px;
   display: block;
 }
 
 .sidebar-title {
   text-align: center;
-  color: #ffffff;
+  color: var(--main-text-color);
   margin-bottom: 25px;
 }
 
@@ -58,7 +57,7 @@
 }
 
 .sidebar .nav-link {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--main-text-color);
   padding: 12px 18px;
   border-radius: 10px;
   text-align: left;
@@ -68,12 +67,12 @@
 
 .sidebar .nav-link:hover {
   background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+  color: var(--main-text-color);
 }
 
 .sidebar .nav-link.active {
-  background: #ffffff;
-  color: #2b5748;
+  background: var(--main-text-color);
+  color: var(--main-color);
   font-weight: 600;
 }
 
@@ -102,6 +101,6 @@
 }
 
 .sidebar-bottom .nav-item:last-child .nav-link:hover {
-  background: #ffffff;
-  color: #2b5748;
+  background: var(--main-text-color);
+  color: var(--main-color);
 }

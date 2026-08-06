@@ -252,18 +252,14 @@
 
                 <div class="modal-footer">
 
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn-batal" data-bs-dismiss="modal">
 
                         Batal
 
                     </button>
 
-                    <button type="submit" class="btn text-white" style="background:#2b5748;">
-
-                        <i class="bi bi-check-circle me-1"></i>
-
+                    <button type="submit" class="btn-simpan">
                         Ubah Barang
-
                     </button>
 
                 </div>

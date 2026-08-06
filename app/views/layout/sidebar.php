@@ -2,7 +2,7 @@
 $controller = $_GET['controller'] ?? 'dashboard';
 $action = $_GET['action'] ?? 'index';
 ?>
-<div class="sidebar">
+<div class="sidebar bg-main">
 
     <!-- Nama Toko -->
     <div class="title">

@@ -44,13 +44,13 @@
 
                 <div class="modal-footer">
 
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    <button class="btn-batal" data-bs-dismiss="modal">
 
                         Batal
 
                     </button>
 
-                    <button class="btn btn-success">
+                    <button class="btn-simpan">
 
                         Ubah
 

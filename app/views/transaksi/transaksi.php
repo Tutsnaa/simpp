@@ -10,8 +10,8 @@
                     Kelola transaksi penjualan dan pemesanan toko
                 </p>
             </div>
-            <a href="index.php?controller=transaksi&action=tambah" class="btn btn-success">
-                <i class="fas fa-plus me-2"></i> Transaksi Baru
+            <a href="index.php?controller=transaksi&action=tambah" class="btn-tambah">
+                <span class="material-symbols-outlined">add_circle</span>Transaksi Baru
             </a>
         </div>
     </div>
@@ -28,7 +28,7 @@
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
                     <thead class="table-success">
-                        <tr>
+                        <tr class="text-center">
                             <th>No</th>
                             <th>ID Transaksi</th>
                             <th>Pelanggan</th>
@@ -44,9 +44,9 @@
                         <?php if (!empty($transaksi)): ?>
                         <?php $no = 1; ?>
                         <?php foreach ($transaksi as $row): ?>
-                        <tr>
+                        <tr class="text-center">
                             <td><?= $no++; ?></td>
-                            <td>TR<?= str_pad($row['id_transaksi'], 5, "0", STR_PAD_LEFT); ?></td>
+                            <td><?= str_pad($row['id_transaksi'], 5, "0", STR_PAD_LEFT); ?></td>
                             <td>
                                 <?= $row['nama_pelanggan'] ?? '-'; ?><br>
                                 <small class="text-muted"><?= $row['no_telepon']; ?></small>
@@ -74,23 +74,29 @@
                             <td><?= date("d-m-Y", strtotime($row['tanggal_dibuat'])); ?></td>
                             <td>
                                 <!-- DETAIL -->
-                                <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal"
+                                <button class="btn-aksi-detail" data-bs-toggle="modal"
                                     data-bs-target="#modalDetail<?= $row['id_transaksi']; ?>">
-                                    <i class="fas fa-eye"></i>
+                                    <span class="material-symbols-outlined">
+                                        visibility
+                                    </span>
                                 </button>
 
                                 <!-- PELUNASAN -->
-                                <?php if ($row['status_pembayaran'] == "DP"): ?>
-                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                <?php if (in_array($row['status_pembayaran'], ['DP', 'Belum Bayar'])): ?>
+                                <button class="btn-aksi-ubah" data-bs-toggle="modal"
                                     data-bs-target="#modalPelunasan<?= $row['id_transaksi']; ?>">
-                                    <i class="fas fa-money-bill"></i>
+                                    <span class="material-symbols-outlined">
+                                        edit
+                                    </span>
                                 </button>
                                 <?php endif; ?>
 
                                 <!-- HAPUS -->
                                 <a href="index.php?controller=transaksi&action=delete&id=<?= $row['id_transaksi']; ?>"
-                                    onclick="return confirm('Hapus transaksi ini?')" class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash"></i>
+                                    onclick="return confirm('Hapus transaksi ini?')" class="btn-aksi-hapus">
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
                                 </a>
                             </td>
                         </tr>

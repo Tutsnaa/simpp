@@ -1,32 +1,22 @@
 /* =====================================
    UKURAN HALAMAN PROFIL
 ===================================== */
-
 :root {
   /* GANTI ANGKA INI SAJA */
-
   --profile-width: 100%;
-
   --profile-max-width: 1250px;
-
   --profile-height: 94vh;
 }
 
 /* =====================================
    CARD
 ===================================== */
-
 .profile-card {
   width: var(--profile-width);
-
   max-width: var(--profile-max-width);
-
   height: var(--profile-height);
-
   margin: 20px auto;
-
   border-radius: 16px;
-
   overflow: hidden;
 }
 
@@ -35,50 +25,38 @@
 }
 
 .profile-card .card-header h4 {
-  color: #2b5748;
+  color: var(--main-color);
 }
 
 .profile-card .card-body {
   height: calc(var(--profile-height) - 65px);
   padding: 0;
 }
+
 /* =====================================
    SIDEBAR
 ===================================== */
-
 .profile-sidebar {
   border-right: 1px solid #e9ecef;
-
   height: 100%;
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
-
   align-items: center;
-
   padding: 25px;
 }
 
 .profile-photo {
   width: 250px;
-
   height: 250px;
-
   object-fit: cover;
-
   border-radius: 10px;
-
-  border: 3px solid #2b5748;
-
+  border: 3px solid var(--main-color);
   margin-bottom: 20px;
 }
 
 .profile-sidebar h5 {
-  color: #2b5748;
-
+  color: var(--main-color);
   font-weight: 600;
 }
 
@@ -89,39 +67,29 @@
 /* =====================================
    CONTENT
 ===================================== */
-
 .profile-content {
   height: 100%;
-
   overflow-y: auto;
-
   padding: 35px;
 }
 
 .section-title {
-  color: #2b5748;
-
+  color: var(--main-color);
   font-size: 22px;
-
   font-weight: 600;
-
   margin-bottom: 30px;
 }
 
 .form-label {
   font-weight: 600;
-
   color: #555;
 }
 
 .form-control {
   height: 46px;
-
   border-radius: 8px;
-
   border: 1px solid #dcdcdc;
-
-  background: #fff;
+  background: var(--main-text-color);
 }
 
 .form-control:read-only {
@@ -130,42 +98,52 @@
 
 textarea.form-control {
   height: auto;
-
   resize: none;
 }
 
 /* =====================================
    BUTTON
 ===================================== */
-
+/* Aturan dasar tombol */
 .btn {
   height: 45px;
-
   border-radius: 8px;
-
   font-weight: 500;
+  padding: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-sm {
+  background: var(--main-color);
+  color: var(--main-text-color);
+  height: 32px;
+  padding: 0 12px;
+  font-size: 0.875rem;
+}
+
+.btn-sm:hover {
+  background: var(--main-color-hover);
+  color: var(--main-text-color);
 }
 
 .btn-success {
-  background: #2b5748;
-
-  border-color: #2b5748;
+  background: var(--main-color);
+  border-color: var(--main-color);
 }
 
 .btn-success:hover {
-  background: #214336;
-
-  border-color: #214336;
+  background: var(--main-color-hover);
+  border-color: var(--main-color-hover);
 }
 
 /* =====================================
    RESPONSIVE
 ===================================== */
-
 @media (max-width: 991px) {
   :root {
     --profile-width: 100%;
-
     --profile-height: auto;
   }
 
@@ -179,9 +157,7 @@ textarea.form-control {
 
   .profile-sidebar {
     border-right: none;
-
     border-bottom: 1px solid #e9ecef;
-
     padding: 25px;
   }
 

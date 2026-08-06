@@ -5,8 +5,8 @@
             <h3 class="fw-bold mb-1">Data Barang</h3>
             <p class="text-muted mb-0">Kelola seluruh data barang toko</p>
         </div>
-        <button class="btn btn-success rounded-3 px-4" data-bs-toggle="modal" data-bs-target="#modalTambah">
-            <i class="bi bi-plus-circle me-2"></i> Tambah Barang
+        <button class="btn-tambah" data-bs-toggle="modal" data-bs-target="#modalTambah">
+            <span class="material-symbols-outlined">add_circle</span>Tambah Barang
         </button>
     </div>
 </div>
@@ -82,20 +82,25 @@
                     </td>
                     <td class="text-center">
                         <!-- Tombol Detail -->
-                        <button class="btn btn-info btn-sm text-white" data-bs-toggle="modal"
+                        <button class="btn-aksi-detail" data-bs-toggle="modal"
                             data-bs-target="#modalDetail<?= $row['id_barang']; ?>" title="Detail Barang">
-                            <i class="bi bi-eye"></i>
+                            <span class="material-symbols-outlined">
+                                visibility
+                            </span>
                         </button>
                         <!-- Tombol Edit -->
-                        <button class="btn btn-warning btn-sm text-dark" data-bs-toggle="modal"
+                        <button class="btn-aksi-ubah" data-bs-toggle="modal"
                             data-bs-target="#edit<?= $row['id_barang']; ?>" title="Edit Barang">
-                            <i class="bi bi-pencil"></i>
+                            <span class="material-symbols-outlined">
+                                edit
+                            </span>
                         </button>
                         <!-- Tombol Hapus -->
                         <a href="index.php?controller=barang&action=delete&id=<?= $row['id_barang']; ?>"
-                            class="btn btn-danger btn-sm" onclick="return confirm('Hapus barang ini?')"
-                            title="Hapus Barang">
-                            <i class="bi bi-trash"></i>
+                            class="btn-aksi-hapus" onclick="return confirm('Hapus barang ini?')" title="Hapus Barang">
+                            <span class="material-symbols-outlined">
+                                delete
+                            </span>
                         </a>
                     </td>
                 </tr>

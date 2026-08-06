@@ -194,4 +194,18 @@ class TransaksiController
 
         require_once "app/views/transaksi/tambah_transaksi.php";
     }
+
+
+    public function cetakLaporanPdf()
+{
+    // Mengambil tanggal filter jika ada
+    $tglAwal  = $_GET['tgl_awal'] ?? null;
+    $tglAkhir = $_GET['tgl_akhir'] ?? null;
+
+    $transaksiModel = new TransaksiModel();
+    $dataTransaksi  = $transaksiModel->getLaporanSelesai($tglAwal, $tglAkhir);
+
+    // Kirim data ke view PDF
+    require_once "app/views/transaksi/cetak_pdf.php";
+}
 }

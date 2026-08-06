@@ -4,7 +4,7 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="p-4 rounded-3 text-white shadow-sm" style="background-color: #2b5748;">
-                <h3 class="fw-bold mb-1">Selamat Datang, <?= htmlspecialchars($_SESSION['nama'] ?? 'Pengguna'); ?>! 👋
+                <h3 class="fw-bold mb-1">Selamat Datang, <?= htmlspecialchars($_SESSION['nama'] ?? 'Pengguna'); ?>!
                 </h3>
                 <p class="mb-0 text-white-50">Berikut adalah ringkasan performa toko Anda hari ini.</p>
             </div>
@@ -96,17 +96,17 @@
         <div class="col-12 col-lg-8">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 fw-bold" style="color: #2b5748;">
+                    <h6 class="m-0 fw-bold d-flex align-items-center" style="color: #2b5748;">
                         <i class="fas fa-history me-2"></i>Transaksi Terbaru
                     </h6>
-                    <a href="index.php?controller=transaksi&action=index" class="btn btn-sm text-white"
-                        style="background-color: #2b5748;">Lihat Semua</a>
+                    <a href="index.php?controller=transaksi&action=index" class="btn btn-sm">Lihat
+                        Semua</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
+                            <thead class="table-success">
+                                <tr class="text-center">
                                     <th>Kode</th>
                                     <th>Pelanggan</th>
                                     <th>Total</th>
@@ -116,10 +116,10 @@
                             <tbody>
                                 <?php if (!empty($transaksiTerbaru)): ?>
                                 <?php foreach ($transaksiTerbaru as $row): ?>
-                                <tr>
+                                <tr class="text-center">
                                     <td>
                                         <span class="fw-bold">
-                                            TR<?= str_pad($row['id_transaksi'], 5, "0", STR_PAD_LEFT); ?>
+                                            <?= str_pad($row['id_transaksi'], 5, "0", STR_PAD_LEFT); ?>
                                         </span>
                                     </td>
                                     <td><?= htmlspecialchars($row['nama_pelanggan'] ?? 'Umum'); ?></td>

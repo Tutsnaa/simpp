@@ -237,4 +237,34 @@ public function getTransaksiTerbaru($limit = 5)
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
+/**
+     * Ambil data transaksi khusus yang berstatus 'Selesai' untuk laporan PDF
+     */
+    public function getLaporanSelesai($tglAwal = null, $tglAkhir = null)
+    {
+        $sql = "SELECT 
+                    t.*, 
+                    p.nama AS nama_kasir 
+                FROM transaksi t
+                LEFT JOIN pengguna p ON t.id_pengguna = p.id_pengguna
+                WHERE t.status_transaksi = 'Selesai'";
+
+        $params = [];
+
+        // Filter opsional berdasarkan rentang tanggal
+        if (!empty($tglAwal) && !empty($tglAkhir)) {
+            $sql .= " AND DATE(t.created_at) BETWEEN :tglAwal AND :tglAkhir";
+            $params[':tglAwal'] = $tglAwal;
+            $params[':tglAkhir'] = $tglAkhir;
+        }
+
+        $sql .= " ORDER BY t.id_transaksi DESC";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

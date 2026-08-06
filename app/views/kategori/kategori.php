@@ -10,9 +10,8 @@
                 Kelola kategori produk toko
             </small>
         </div>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambah">
-            <i class="bi bi-plus-circle"></i>
-            Tambah Kategori
+        <button class="btn-tambah" data-bs-toggle="modal" data-bs-target="#modalTambah">
+            <span class="material-symbols-outlined">add_circle</span>Tambah Kategori
         </button>
     </div>
 </div>
@@ -40,7 +39,7 @@
         <table class="table table-hover align-middle mb-0">
             <!-- PENTING: Penambahan class sticky-top & z-index agar header tetap melayang di atas -->
             <thead class="sticky-top table-success">
-                <tr>
+                <tr class="text-center">
                     <th width="70">No</th>
                     <th>Nama Kategori</th>
                     <th>Keterangan</th>
@@ -54,7 +53,7 @@
                 <?php $no=1; ?>
                 <?php foreach($kategori as $row): ?>
                 <tr>
-                    <td><?= $no++ ?></td>
+                    <td class="text-center"><?= $no++ ?></td>
                     <td>
                         <div class="fw-semibold">
                             <?= htmlspecialchars($row['nama_kategori']) ?>
@@ -63,17 +62,21 @@
                     <td>
                         <?= $row['keterangan'] ?: "-" ?>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <?= date("d M Y",strtotime($row['tanggal_dibuat'])) ?>
                     </td>
-                    <td class="text-center">
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                    <td class="text-center text-nowrap">
+                        <button class="btn-aksi-ubah" data-bs-toggle="modal"
                             data-bs-target="#edit<?= $row['id_kategori']?>">
-                            <i class="bi bi-pencil"></i>
+                            <span class="material-symbols-outlined">
+                                edit
+                            </span>
                         </button>
                         <a href="index.php?controller=kategori&action=delete&id=<?= $row['id_kategori']?>"
-                            class="btn btn-danger btn-sm" onclick="return confirm('Hapus kategori ini?')">
-                            <i class="bi bi-trash"></i>
+                            class="btn-aksi-hapus " onclick="return confirm('Hapus kategori ini?')">
+                            <span class="material-symbols-outlined">
+                                delete
+                            </span>
                         </a>
                     </td>
                 </tr>

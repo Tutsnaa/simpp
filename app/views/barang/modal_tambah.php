@@ -224,21 +224,15 @@
 
                 <div class="modal-footer">
 
-                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
+                    <button type="button" class="btn-batal" data-bs-dismiss="modal">Batal</button>
 
-                        Batal
-
-                    </button>
-
-                    <button type="reset" class="btn btn-warning">
+                    <button type="reset" class="btn-reset">
 
                         Reset
 
                     </button>
 
-                    <button type="submit" class="btn text-white" style="background:#2b5748;">
-
-                        <i class="bi bi-check-circle me-1"></i>
+                    <button type="submit" class="btn-simpan">
 
                         Simpan Barang
 

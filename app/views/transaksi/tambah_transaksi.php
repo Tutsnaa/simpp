@@ -11,158 +11,8 @@
     <!-- FONT AWESOME -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <style>
-    :root {
-        /* TEMA WARNA UTAMA (#2b5748) */
-        --pos-primary: #2b5748;
-        --pos-primary-hover: #214337;
-        --pos-primary-light: #f0f5f3;
-        --pos-primary-border: #c3d4cd;
-        --pos-bg: #f4f6f5;
-    }
+    <link rel="stylesheet" href="assets/css/tambah_transaksi.css?v=<?= time(); ?>">
 
-    body {
-        background-color: var(--pos-bg);
-        font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        overflow-x: hidden;
-    }
-
-    /* CUSTOM ACCENT COLOR OVERRIDES */
-    .text-primary-custom {
-        color: var(--pos-primary) !important;
-    }
-
-    .btn-primary-custom {
-        background-color: var(--pos-primary) !important;
-        border-color: var(--pos-primary) !important;
-        color: #ffffff !important;
-    }
-
-    .btn-primary-custom:hover {
-        background-color: var(--pos-primary-hover) !important;
-        border-color: var(--pos-primary-hover) !important;
-    }
-
-    .pos-header {
-        background: #ffffff;
-        height: 60px;
-        padding: 0 20px;
-        border-bottom: 1px solid #e3e6f0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .pos-wrapper {
-        height: calc(100vh - 60px);
-    }
-
-    .cart-panel {
-        background: #ffffff;
-        border-right: 1px solid #e3e6f0;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        padding: 15px;
-        overflow-y: auto;
-    }
-
-    .cart-table-box {
-        flex-grow: 1;
-        min-height: 180px;
-        max-height: 35vh;
-        overflow-y: auto;
-        border: 1px solid #e3e6f0;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        background: #fff;
-    }
-
-    .total-box {
-        background: var(--pos-primary);
-        color: #fff;
-        padding: 12px 15px;
-        border-radius: 8px;
-        margin-bottom: 12px;
-    }
-
-    .product-panel {
-        height: 100%;
-        overflow-y: auto;
-        padding: 15px;
-    }
-
-    .product-card {
-        background: #fff;
-        border: 1px solid #e3e6f0;
-        border-radius: 10px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: all 0.2s ease-in-out;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .product-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 0.5rem 1rem rgba(43, 87, 72, 0.12);
-        border-color: var(--pos-primary);
-    }
-
-    .product-img-wrapper {
-        margin: 0 auto;
-        width: 200px;
-        height: 200px;
-        background: #f1f4f3;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-    }
-
-    .product-img-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .product-info {
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        justify-content: space-between;
-    }
-
-    .qty-control {
-        display: flex;
-        align-items: center;
-        gap: 3px;
-    }
-
-    .qty-control input {
-        width: 38px;
-        text-align: center;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        padding: 2px;
-    }
-
-    .box-pemesanan-kiri {
-        background-color: var(--pos-primary-light);
-        border: 1px solid var(--pos-primary-border);
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 12px;
-    }
-
-    .form-control:focus,
-    .form-select:focus {
-        border-color: var(--pos-primary);
-        box-shadow: 0 0 0 0.25rem rgba(43, 87, 72, 0.25);
-    }
-    </style>
 </head>
 
 <body>
@@ -226,8 +76,8 @@
                             <div class="col-12">
                                 <label class="form-label small text-muted mb-1" style="font-size: 11px;">Catatan
                                     Pesanan</label>
-                                <textarea class="form-control form-control-sm" name="catatan" id="catatan" rows="2"
-                                    placeholder="Contoh: Tanpa pedas, bungkus terpisah, dll"></textarea>
+                                <textarea class="form-control form-control-sm" name="catatan" id="catatan"
+                                    rows="2"></textarea>
                             </div>
                         </div>
                     </div>

@@ -150,22 +150,25 @@ function hitungTotal() {
 }
 
 // 5. ATUR MODE: PENJUALAN vs PEMESANAN
+// 5. ATUR MODE: PENJUALAN vs PEMESANAN
 function aturJenisTransaksi() {
     let isPenjualan = (jenisTransaksi.value === "Penjualan");
 
-    // Tampilkan/Sembunyikan Form Pemesanan
+    // Tampilkan/Sembunyikan Form Khusus Pemesanan
     document.getElementById("box_pemesanan_kiri").style.display = isPenjualan ? "none" : "block";
-    document.getElementById("box_sisa").style.display = isPenjualan ? "none" : "block";
     document.getElementById("box_status_pemesanan").style.display = isPenjualan ? "none" : "flex";
 
-    // Sembunyikan/Tampilkan Kembalian
-    document.getElementById("box_kembalian").style.display = isPenjualan ? "block" : "none";
+    // KEDUA BOX (KEMBALIAN & SISA) SELALU DITAMPILKAN
+    document.getElementById("box_kembalian").style.display = "block";
+    document.getElementById("box_sisa").style.display = isPenjualan ? "none" :
+    "block"; // Sisa bayar hanya aktif di Pemesanan
 
     // Atur Judul Modal
     document.getElementById("modal_title_text").innerText = isPenjualan ? "Pembayaran Direct POS" :
         "Pembayaran Pemesanan";
     document.getElementById("label_jumlah_bayar").innerText = isPenjualan ? "Jumlah Dibayar" :
-        "Jumlah Dibayar (DP / Pelunasan)";
+        "Uang Diterima / Cash (DP/Pelunasan)";
+
     if (isPenjualan) {
         let inputNama = document.getElementById("nama_pelanggan");
         if (inputNama.value.trim() === "") {
