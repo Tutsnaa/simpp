@@ -29,6 +29,7 @@ class PenggunaController
 
         $title = "Data Pengguna";
         $content = "app/views/pengguna/index.php";
+        $content = "app/views/data_pengguna/data_pengguna.php";
 
         require_once "app/views/dashboard/dashboard.php";
     }

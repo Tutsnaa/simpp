@@ -29,6 +29,13 @@ $action = $_GET['action'] ?? 'index';
             </li>
 
             <li class="nav-item">
+                <a href="index.php?controller=data_pengguna&action=index"
+                    class="nav-link <?= ($controller == 'data_pengguna' && $action == 'index') ? 'active' : ''; ?>">
+                    Data Pengguna
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a href="index.php?controller=kategori&action=index"
                     class="nav-link <?= ($controller == 'kategori' && $action == 'index') ? 'active' : ''; ?>">
                     Kategori
@@ -46,13 +53,6 @@ $action = $_GET['action'] ?? 'index';
                 <a href="index.php?controller=transaksi&action=index"
                     class="nav-link <?= ($controller == 'transaksi' && $action == 'index') ? 'active' : ''; ?>">
                     Transaksi
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="index.php?controller=banner&action=index"
-                    class="nav-link <?= ($controller == 'banner' && $action == 'index') ? 'active' : ''; ?>">
-                    Banner
                 </a>
             </li>
 

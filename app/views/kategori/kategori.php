@@ -1,7 +1,5 @@
 <div class="card shadow-sm border-0 mb-4">
     <div class="card-body d-flex justify-content-between align-items-center">
-        <?php require_once "modal_tambah.php"; ?>
-        <?php require_once "modal_ubah.php"; ?>
         <div>
             <h4 class="fw-bold mb-1">
                 Data Kategori
@@ -87,3 +85,5 @@
 </div>
 
 <?php require_once "script.php"; ?>
+<?php require_once "modal_tambah.php"; ?>
+<?php require_once "modal_ubah.php"; ?>

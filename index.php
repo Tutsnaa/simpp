@@ -38,9 +38,9 @@ switch ($controller) {
         $controller = new TransaksiController();
         break;
 
-    case 'banner':
-        require_once "app/controllers/BannerController.php";
-        $controller = new BannerController();
+    case 'data_pengguna':
+        require_once "app/controllers/PenggunaController.php";
+        $controller = new PenggunaController();
         break;
 
     default:
