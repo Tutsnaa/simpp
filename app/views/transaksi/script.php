@@ -2,46 +2,39 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// FILTER DATA TRANSAKSI
 document.addEventListener('DOMContentLoaded', function() {
-    // Ambil elemen input filter
+
+    // ==========================================
+    // 1. FILTER DATA TRANSAKSI (HALAMAN INDEX)
+    // ==========================================
     const searchInput = document.getElementById('searchTransaksi');
     const filterJenis = document.getElementById('filterJenis');
     const filterPembayaran = document.getElementById('filterPembayaran');
     const filterStatus = document.getElementById('filterStatus');
-
-    // Ambil seluruh baris data di dalam tbody
     const tableRows = document.querySelectorAll('tbody tr');
 
     function applyFilter() {
-        const querySearch = searchInput.value.toLowerCase().trim();
-        const selectedJenis = filterJenis.value.toLowerCase().trim();
-        const selectedPembayaran = filterPembayaran.value.toLowerCase().trim();
-        const selectedStatus = filterStatus.value.toLowerCase().trim();
+        const querySearch = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        const selectedJenis = filterJenis ? filterJenis.value.toLowerCase().trim() : '';
+        const selectedPembayaran = filterPembayaran ? filterPembayaran.value.toLowerCase().trim() : '';
+        const selectedStatus = filterStatus ? filterStatus.value.toLowerCase().trim() : '';
 
         tableRows.forEach(row => {
-            // Abaikan jika baris tersebut adalah pesan "Belum ada transaksi"
             if (row.children.length === 1) return;
 
-            // Ambil teks dari kolom yang relevan
             const idTransaksi = row.children[1]?.textContent.toLowerCase().trim() || '';
-            const pelangganInfo = row.children[2]?.textContent.toLowerCase().trim() ||
-            ''; // Nama & No Telp
-            const jenisTransaksi = row.children[3]?.textContent.toLowerCase().trim() || '';
-            const statusPembayaran = row.children[5]?.textContent.toLowerCase().trim() || '';
-            const statusTransaksi = row.children[6]?.textContent.toLowerCase().trim() || '';
+            const pelangganInfo = row.children[2]?.textContent.toLowerCase().trim() || '';
+            const jenisTransaksiText = row.children[3]?.textContent.toLowerCase().trim() || '';
+            const statusPembayaranText = row.children[5]?.textContent.toLowerCase().trim() || '';
+            const statusTransaksiText = row.children[6]?.textContent.toLowerCase().trim() || '';
 
-            // Cek Pencarian Teks (ID, Pelanggan, atau No Telp)
             const matchSearch = idTransaksi.includes(querySearch) || pelangganInfo.includes(
-            querySearch);
-
-            // Cek Dropdown Filter
-            const matchJenis = selectedJenis === '' || jenisTransaksi.includes(selectedJenis);
-            const matchPembayaran = selectedPembayaran === '' || statusPembayaran.includes(
+                querySearch);
+            const matchJenis = selectedJenis === '' || jenisTransaksiText.includes(selectedJenis);
+            const matchPembayaran = selectedPembayaran === '' || statusPembayaranText.includes(
                 selectedPembayaran);
-            const matchStatus = selectedStatus === '' || statusTransaksi.includes(selectedStatus);
+            const matchStatus = selectedStatus === '' || statusTransaksiText.includes(selectedStatus);
 
-            // Tampilkan baris jika SEMUA kondisi terpenuhi, jika tidak sembunyikan
             if (matchSearch && matchJenis && matchPembayaran && matchStatus) {
                 row.style.display = '';
             } else {
@@ -50,81 +43,101 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Pasang Event Listener ke setiap input filter
     if (searchInput) searchInput.addEventListener('input', applyFilter);
     if (filterJenis) filterJenis.addEventListener('change', applyFilter);
     if (filterPembayaran) filterPembayaran.addEventListener('change', applyFilter);
     if (filterStatus) filterStatus.addEventListener('change', applyFilter);
-});
 
-// ----------------------------------------------------------------------------------------------------------------------
 
-let itemIndex = 0;
-let cartItems = {};
+    // ==========================================
+    // 2. DEKLARASI ELEMEN POS & MODAL
+    // ==========================================
+    let itemIndex = 0;
+    let cartItems = {};
 
-// ELEMEN INTERAKSI PEMBAYARAN (DIDEKLARASIKAN DI ATAS AGAR BEBAS ERROR INITIALIZATION)
-const inputTampil = document.getElementById("jumlah_bayar_tampil");
-const inputHidden = document.getElementById("jumlah_bayar");
-const jenisTransaksi = document.getElementById("jenis_transaksi");
+    const inputTampil = document.getElementById("jumlah_bayar_tampil");
+    const inputHidden = document.getElementById("jumlah_bayar");
+    const jenisTransaksi = document.getElementById("jenis_transaksi");
+    const formTransaksi = document.getElementById("form_transaksi");
 
-// HELPER FORMAT RUPIAH
-function formatRupiah(angka) {
-    return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
+    const modalPembayaranEl = document.getElementById('modalPembayaran');
+    const modalStrukEl = document.getElementById('modalStruk');
 
-// FUNGSI HITUNG PEMBAYARAN
-function hitungPembayaran() {
-    const total = parseFloat(document.getElementById("input_total").value) || 0;
-    const bayar = parseFloat(inputHidden.value) || 0;
+    const modalPembayaran = modalPembayaranEl ? new bootstrap.Modal(modalPembayaranEl) : null;
+    const modalStruk = modalStrukEl ? new bootstrap.Modal(modalStrukEl) : null;
 
-    let kembalian = 0;
-    let sisa = 0;
-
-    if (bayar >= total) {
-        kembalian = bayar - total;
-        sisa = 0;
-        if (jenisTransaksi.value === "Pemesanan") {
-            document.getElementById("status_pembayaran").value = "Lunas";
-        }
-    } else {
-        kembalian = 0;
-        sisa = total - bayar;
-        if (jenisTransaksi.value === "Pemesanan") {
-            document.getElementById("status_pembayaran").value = (bayar > 0) ? "DP" : "Belum Bayar";
-        }
+    // Helper Format Rupiah
+    function formatRupiah(angka) {
+        return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
-    document.getElementById("kembalian").value = "Rp " + formatRupiah(kembalian);
-    document.getElementById("sisa_bayar").value = "Rp " + formatRupiah(sisa);
-    document.getElementById("input_sisa_bayar").value = sisa;
-}
+    // Hitung Kembalian & Sisa Bayar
+    function hitungPembayaran() {
+        const inputTotal = document.getElementById("input_total");
+        if (!inputTotal || !inputHidden) return;
 
-// 1. CARI PRODUK (LIVE SEARCH)
-document.getElementById("search_produk").addEventListener("keyup", function() {
-    let filter = this.value.toLowerCase();
-    let items = document.querySelectorAll(".item-produk");
+        const total = parseFloat(inputTotal.value) || 0;
+        const bayar = parseFloat(inputHidden.value) || 0;
 
-    items.forEach(function(item) {
-        let nama = item.getAttribute("data-nama");
-        item.style.display = nama.includes(filter) ? "" : "none";
-    });
-});
+        let kembalian = 0;
+        let sisa = 0;
 
-// 2. TAMBAH BARANG KE KERANJANG
-document.querySelectorAll(".btn-add-cart").forEach(function(element) {
-    element.addEventListener("click", function() {
-        let id = this.dataset.id;
-        let nama = this.dataset.nama;
-        let harga = parseInt(this.dataset.harga);
-
-        if (cartItems[id]) {
-            let row = document.getElementById("row_cart_" + id);
-            let inputQty = row.querySelector(".qty-input");
-            inputQty.value = parseInt(inputQty.value) + 1;
-            updateRow(inputQty);
+        if (bayar >= total) {
+            kembalian = bayar - total;
+            sisa = 0;
+            if (jenisTransaksi && jenisTransaksi.value === "Pemesanan") {
+                const elStatusBayar = document.getElementById("status_pembayaran");
+                if (elStatusBayar) elStatusBayar.value = "Lunas";
+            }
         } else {
-            cartItems[id] = true;
-            let html = `
+            kembalian = 0;
+            sisa = total - bayar;
+            if (jenisTransaksi && jenisTransaksi.value === "Pemesanan") {
+                const elStatusBayar = document.getElementById("status_pembayaran");
+                if (elStatusBayar) elStatusBayar.value = (bayar > 0) ? "DP" : "Belum Bayar";
+            }
+        }
+
+        const elKembalian = document.getElementById("kembalian");
+        const elSisaBayar = document.getElementById("sisa_bayar");
+        const elInputSisa = document.getElementById("input_sisa_bayar");
+
+        if (elKembalian) elKembalian.value = "Rp " + formatRupiah(kembalian);
+        if (elSisaBayar) elSisaBayar.value = "Rp " + formatRupiah(sisa);
+        if (elInputSisa) elInputSisa.value = sisa;
+    }
+
+
+    // ==========================================
+    // 3. FITUR KERANJANG BELANJA (POS)
+    // ==========================================
+    // Live Search Produk
+    const searchProduk = document.getElementById("search_produk");
+    if (searchProduk) {
+        searchProduk.addEventListener("keyup", function() {
+            let filter = this.value.toLowerCase();
+            document.querySelectorAll(".item-produk").forEach(function(item) {
+                let nama = item.getAttribute("data-nama");
+                item.style.display = nama.includes(filter) ? "" : "none";
+            });
+        });
+    }
+
+    // Tambah Barang Ke Keranjang
+    document.querySelectorAll(".btn-add-cart").forEach(function(element) {
+        element.addEventListener("click", function() {
+            let id = this.dataset.id;
+            let nama = this.dataset.nama;
+            let harga = parseInt(this.dataset.harga);
+
+            if (cartItems[id]) {
+                let row = document.getElementById("row_cart_" + id);
+                let inputQty = row.querySelector(".qty-input");
+                inputQty.value = parseInt(inputQty.value) + 1;
+                updateRow(inputQty);
+            } else {
+                cartItems[id] = true;
+                let html = `
                     <tr id="row_cart_${id}">
                         <td>
                             <div class="fw-bold text-truncate" style="max-width: 100px;">${nama}</div>
@@ -149,191 +162,353 @@ document.querySelectorAll(".btn-add-cart").forEach(function(element) {
                         </td>
                     </tr>`;
 
-            document.getElementById("cart_body").insertAdjacentHTML("beforeend", html);
-            itemIndex++;
-        }
-
-        hitungTotal();
+                const cartBody = document.getElementById("cart_body");
+                if (cartBody) cartBody.insertAdjacentHTML("beforeend", html);
+                itemIndex++;
+            }
+            hitungTotal();
+        });
     });
-});
 
-// 3. UBAH QTY & HAPUS ITEM
-document.addEventListener("click", function(e) {
-    if (e.target.closest(".btn-plus")) {
-        let input = e.target.closest("tr").querySelector(".qty-input");
-        input.value = parseInt(input.value) + 1;
-        updateRow(input);
-    }
-
-    if (e.target.closest(".btn-minus")) {
-        let input = e.target.closest("tr").querySelector(".qty-input");
-        if (parseInt(input.value) > 1) {
-            input.value = parseInt(input.value) - 1;
+    // Delegasi Event Plus, Minus, Hapus
+    document.addEventListener("click", function(e) {
+        if (e.target.closest(".btn-plus")) {
+            let input = e.target.closest("tr").querySelector(".qty-input");
+            input.value = parseInt(input.value) + 1;
             updateRow(input);
         }
-    }
 
-    if (e.target.closest(".btn-hapus")) {
-        let btn = e.target.closest(".btn-hapus");
-        delete cartItems[btn.dataset.id];
-        btn.closest("tr").remove();
-        hitungTotal();
-    }
-});
+        if (e.target.closest(".btn-minus")) {
+            let input = e.target.closest("tr").querySelector(".qty-input");
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+                updateRow(input);
+            }
+        }
 
-function updateRow(input) {
-    let row = input.closest("tr");
-    let harga = parseInt(row.querySelector("input[name*='[harga]']").value);
-    let qty = parseInt(input.value);
-    let subtotal = harga * qty;
-
-    row.querySelector(".subtotal").innerText = "Rp " + subtotal.toLocaleString('id-ID');
-    row.querySelector(".input-subtotal").value = subtotal;
-
-    hitungTotal();
-}
-
-// 4. HITUNG TOTAL BELANJA
-function hitungTotal() {
-    let total = 0;
-    document.querySelectorAll(".input-subtotal").forEach(function(item) {
-        total += parseInt(item.value) || 0;
+        if (e.target.closest(".btn-hapus")) {
+            let btn = e.target.closest(".btn-hapus");
+            delete cartItems[btn.dataset.id];
+            btn.closest("tr").remove();
+            hitungTotal();
+        }
     });
 
-    document.getElementById("label_total").innerText = "Rp " + total.toLocaleString('id-ID');
-    document.getElementById("input_total").value = total;
+    function updateRow(input) {
+        let row = input.closest("tr");
+        let harga = parseInt(row.querySelector("input[name*='[harga]']").value);
+        let qty = parseInt(input.value);
+        let subtotal = harga * qty;
 
-    hitungPembayaran();
-}
-
-// 5. ATUR MODE: PENJUALAN vs PEMESANAN
-// 5. ATUR MODE: PENJUALAN vs PEMESANAN
-function aturJenisTransaksi() {
-    let isPenjualan = (jenisTransaksi.value === "Penjualan");
-
-    // Tampilkan/Sembunyikan Form Khusus Pemesanan
-    document.getElementById("box_pemesanan_kiri").style.display = isPenjualan ? "none" : "block";
-    document.getElementById("box_status_pemesanan").style.display = isPenjualan ? "none" : "flex";
-
-    // KEDUA BOX (KEMBALIAN & SISA) SELALU DITAMPILKAN
-    document.getElementById("box_kembalian").style.display = "block";
-    document.getElementById("box_sisa").style.display = isPenjualan ? "none" :
-        "block"; // Sisa bayar hanya aktif di Pemesanan
-
-    // Atur Judul Modal
-    document.getElementById("modal_title_text").innerText = isPenjualan ? "Pembayaran Direct POS" :
-        "Pembayaran Pemesanan";
-    document.getElementById("label_jumlah_bayar").innerText = isPenjualan ? "Jumlah Dibayar" :
-        "Uang Diterima / Cash (DP/Pelunasan)";
-
-    if (isPenjualan) {
-        let inputNama = document.getElementById("nama_pelanggan");
-        if (inputNama.value.trim() === "") {
-            inputNama.value = "Pelanggan Umum";
-        }
-        document.getElementById("status_pembayaran").value = "Lunas";
-        document.getElementById("status_transaksi").value = "Selesai";
-    } else {
-        if (document.getElementById("nama_pelanggan").value === "Pelanggan Umum") {
-            document.getElementById("nama_pelanggan").value = "";
-        }
-        document.getElementById("status_pembayaran").value = "DP";
-        document.getElementById("status_transaksi").value = "Diproses";
+        row.querySelector(".subtotal").innerText = "Rp " + subtotal.toLocaleString('id-ID');
+        row.querySelector(".input-subtotal").value = subtotal;
+        hitungTotal();
     }
 
-    hitungPembayaran();
-}
+    function hitungTotal() {
+        let total = 0;
+        document.querySelectorAll(".input-subtotal").forEach(function(item) {
+            total += parseInt(item.value) || 0;
+        });
 
-jenisTransaksi.addEventListener("change", aturJenisTransaksi);
-aturJenisTransaksi();
+        const labelTotal = document.getElementById("label_total");
+        const inputTotal = document.getElementById("input_total");
 
-// 6. MODAL PEMBAYARAN & VALIDASI
-const modalPembayaran = new bootstrap.Modal(document.getElementById('modalPembayaran'));
-document.getElementById("btn_lanjut_bayar").addEventListener("click", function() {
-    let rows = document.querySelectorAll("#cart_body tr");
-    let inputPelanggan = document.getElementById("nama_pelanggan");
-    let namaPelanggan = inputPelanggan.value.trim();
+        if (labelTotal) labelTotal.innerText = "Rp " + total.toLocaleString('id-ID');
+        if (inputTotal) inputTotal.value = total;
 
-    if (rows.length === 0) {
-        alert("Keranjang belanjaan masih kosong!");
-        return;
-    }
-
-    if (jenisTransaksi.value === "Penjualan" && namaPelanggan === "") {
-        inputPelanggan.value = "Pelanggan Umum";
-        namaPelanggan = "Pelanggan Umum";
-    }
-
-    if (namaPelanggan === "") {
-        alert("Harap isi Nama Pelanggan terlebih dahulu!");
-        inputPelanggan.focus();
-        return;
-    }
-
-    modalPembayaran.show();
-});
-
-// 7. FORMAT NOMINAL RUPIAH & EVENT INPUT
-inputTampil.addEventListener("focus", function() {
-    if (this.value === "0") this.value = "";
-});
-
-inputTampil.addEventListener("blur", function() {
-    if (this.value.trim() === "") {
-        this.value = "0";
-        inputHidden.value = 0;
         hitungPembayaran();
     }
-});
 
-inputTampil.addEventListener("input", function() {
-    let nominalMurni = this.value.replace(/[^0-9]/g, "");
 
-    if (nominalMurni.length > 1 && nominalMurni.startsWith("0")) {
-        nominalMurni = parseInt(nominalMurni, 10).toString();
-    }
+    // ==========================================
+    // 4. ATUR MODE: PENJUALAN vs PEMESANAN
+    // ==========================================
+    function aturJenisTransaksi() {
+        if (!jenisTransaksi) return;
 
-    if (nominalMurni !== "") {
-        inputHidden.value = nominalMurni;
-        this.value = formatRupiah(nominalMurni);
-    } else {
-        inputHidden.value = 0;
-        this.value = "";
-    }
+        let isPenjualan = (jenisTransaksi.value === "Penjualan");
 
-    hitungPembayaran();
-});
+        const boxKiri = document.getElementById("box_pemesanan_kiri");
+        const boxStatus = document.getElementById("box_status_pemesanan");
+        const boxKembalian = document.getElementById("box_kembalian");
+        const boxSisa = document.getElementById("box_sisa");
+        const modalTitle = document.getElementById("modal_title_text");
+        const labelBayar = document.getElementById("label_jumlah_bayar");
+        const inputNama = document.getElementById("nama_pelanggan");
+        const statusPembayaran = document.getElementById("status_pembayaran");
+        const statusTransaksi = document.getElementById("status_transaksi");
 
-// EVENT ENTER GLOBAL UNTUK BUKA MODAL & SIMPAN TRANSAKSI
-document.addEventListener("keydown", function(e) {
-    // Cek apakah tombol yang ditekan adalah Enter (Key Code 13)
-    if (e.key === "Enter" || e.keyCode === 13) {
+        if (boxKiri) boxKiri.style.display = isPenjualan ? "none" : "block";
+        if (boxStatus) boxStatus.style.display = isPenjualan ? "none" : "flex";
+        if (boxKembalian) boxKembalian.style.display = "block";
+        if (boxSisa) boxSisa.style.display = isPenjualan ? "none" : "block";
 
-        // 1. Jika fokus sedang di textarea catatan, biarkan Enter berfungsi normal (buat baris baru)
-        if (document.activeElement.tagName === "TEXTAREA") {
-            return;
-        }
+        if (modalTitle) modalTitle.innerText = isPenjualan ? "Pembayaran Direct POS" : "Pembayaran Pemesanan";
+        if (labelBayar) labelBayar.innerText = isPenjualan ? "Jumlah Dibayar" :
+            "Uang Diterima / Cash (DP/Pelunasan)";
 
-        // Cegah perilaku default form submit otomatis saat tekan Enter
-        e.preventDefault();
-
-        const modalEl = document.getElementById("modalPembayaran");
-        const isModalOpen = modalEl.classList.contains("show");
-
-        if (!isModalOpen) {
-            // ENTER KE-1: Jika modal belum terbuka, pemicu tombol "Lanjut Pembayaran"
-            document.getElementById("btn_lanjut_bayar").click();
-
-            // Fokuskan otomatis kursor ke input jumlah bayar agar user bisa langsung ketik angka
-            setTimeout(function() {
-                inputTampil.focus();
-                inputTampil.select(); // Pilih semua teks '0' agar langsung tertimpa saat diketik
-            }, 300); // Tunda sedikit sampai modal selesai animasi muncul
-
+        if (isPenjualan) {
+            if (inputNama && inputNama.value.trim() === "") inputNama.value = "Pelanggan Umum";
+            if (statusPembayaran) statusPembayaran.value = "Lunas";
+            if (statusTransaksi) statusTransaksi.value = "Selesai";
         } else {
-            // ENTER KE-2: Jika modal sudah terbuka, pemicu submit / tombol "Simpan Transaksi"
-            document.getElementById("form_transaksi").submit();
+            if (inputNama && inputNama.value === "Pelanggan Umum") inputNama.value = "";
+            if (statusPembayaran) statusPembayaran.value = "DP";
+            if (statusTransaksi) statusTransaksi.value = "Diproses";
+        }
+
+        hitungPembayaran();
+    }
+
+    if (jenisTransaksi) {
+        jenisTransaksi.addEventListener("change", aturJenisTransaksi);
+        aturJenisTransaksi();
+    }
+
+
+    // ==========================================
+    // 5. EVENT INPUT RUPIAH & VALIDASI MODAL
+    // ==========================================
+    const btnLanjut = document.getElementById("btn_lanjut_bayar");
+    if (btnLanjut) {
+        btnLanjut.addEventListener("click", function() {
+            let rows = document.querySelectorAll("#cart_body tr");
+            let inputPelanggan = document.getElementById("nama_pelanggan");
+            let namaPelanggan = inputPelanggan ? inputPelanggan.value.trim() : "";
+
+            if (rows.length === 0) {
+                alert("Keranjang belanjaan masih kosong!");
+                return;
+            }
+
+            if (jenisTransaksi && jenisTransaksi.value === "Penjualan" && namaPelanggan === "") {
+                if (inputPelanggan) inputPelanggan.value = "Pelanggan Umum";
+                namaPelanggan = "Pelanggan Umum";
+            }
+
+            if (namaPelanggan === "") {
+                alert("Harap isi Nama Pelanggan terlebih dahulu!");
+                if (inputPelanggan) inputPelanggan.focus();
+                return;
+            }
+
+            if (modalPembayaran) modalPembayaran.show();
+        });
+    }
+
+    if (inputTampil) {
+        inputTampil.addEventListener("focus", function() {
+            if (this.value === "0") this.value = "";
+        });
+
+        inputTampil.addEventListener("blur", function() {
+            if (this.value.trim() === "") {
+                this.value = "0";
+                if (inputHidden) inputHidden.value = 0;
+                hitungPembayaran();
+            }
+        });
+
+        inputTampil.addEventListener("input", function() {
+            let nominalMurni = this.value.replace(/[^0-9]/g, "");
+
+            if (nominalMurni.length > 1 && nominalMurni.startsWith("0")) {
+                nominalMurni = parseInt(nominalMurni, 10).toString();
+            }
+
+            if (nominalMurni !== "") {
+                if (inputHidden) inputHidden.value = nominalMurni;
+                this.value = formatRupiah(nominalMurni);
+            } else {
+                if (inputHidden) inputHidden.value = 0;
+                this.value = "";
+            }
+
+            hitungPembayaran();
+        });
+    }
+
+
+    // ==========================================
+    // 6. ISI TEMPLATE STRUK PRINT
+    // ==========================================
+    function isiTemplatePrintArea() {
+        const pTgl = document.getElementById("p_tgl");
+        const pPelanggan = document.getElementById("p_pelanggan");
+        const pJenis = document.getElementById("p_jenis");
+        const pItems = document.getElementById("p_items");
+        const pTotal = document.getElementById("p_total");
+        const pBayar = document.getElementById("p_bayar");
+        const pKembalian = document.getElementById("p_kembalian");
+        const pSisa = document.getElementById("p_sisa");
+        const pBoxKembalian = document.getElementById("p_box_kembalian");
+        const pBoxSisa = document.getElementById("p_box_sisa");
+
+        const today = new Date();
+        const tglFormatted = today.toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        if (pTgl) pTgl.innerText = tglFormatted;
+        if (pPelanggan) pPelanggan.innerText = document.getElementById("nama_pelanggan")?.value || "-";
+        if (pJenis) pJenis.innerText = jenisTransaksi?.value || "Penjualan";
+
+        // Generate Item Tabel Struk
+        if (pItems) {
+            pItems.innerHTML = "";
+            document.querySelectorAll("#cart_body tr").forEach(row => {
+                const nama = row.querySelector("input[name*='[nama_barang]']")?.value || "";
+                const qty = row.querySelector(".qty-input")?.value || "1";
+                const harga = parseFloat(row.querySelector("input[name*='[harga]']")?.value || 0);
+                const subtotal = parseFloat(row.querySelector(".input-subtotal")?.value || 0);
+
+                let tr = `
+                    <tr>
+                        <td colspan="2" class="fw-bold">${nama}</td>
+                    </tr>
+                    <tr>
+                        <td>${qty} x Rp ${formatRupiah(harga)}</td>
+                        <td class="text-end">Rp ${formatRupiah(subtotal)}</td>
+                    </tr>`;
+                pItems.insertAdjacentHTML("beforeend", tr);
+            });
+        }
+
+        const totalVal = parseFloat(document.getElementById("input_total")?.value || 0);
+        const bayarVal = parseFloat(inputHidden?.value || 0);
+        const sisaVal = parseFloat(document.getElementById("input_sisa_bayar")?.value || 0);
+        const kembalianVal = bayarVal > totalVal ? bayarVal - totalVal : 0;
+
+        if (pTotal) pTotal.innerText = "Rp " + formatRupiah(totalVal);
+        if (pBayar) pBayar.innerText = "Rp " + formatRupiah(bayarVal);
+        if (pKembalian) pKembalian.innerText = "Rp " + formatRupiah(kembalianVal);
+        if (pSisa) pSisa.innerText = "Rp " + formatRupiah(sisaVal);
+
+        if (jenisTransaksi && jenisTransaksi.value === "Pemesanan") {
+            if (pBoxSisa) pBoxSisa.style.display = "flex";
+        } else {
+            if (pBoxSisa) pBoxSisa.style.display = "none";
         }
     }
+
+
+    // ==========================================
+    // 7. PROSES SIMPAN AJAX & VALIDASI PEMBAYARAN
+    // ==========================================
+    if (formTransaksi) {
+        formTransaksi.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const total = parseFloat(document.getElementById("input_total")?.value) || 0;
+            const bayar = parseFloat(inputHidden?.value) || 0;
+            const jenis = jenisTransaksi ? jenisTransaksi.value : "Penjualan";
+
+            // Validasi Bayar Kosong / 0
+            if (bayar <= 0) {
+                alert("Gagal menyimpan! Harap masukkan jumlah uang pembayaran terlebih dahulu.");
+                if (inputTampil) {
+                    inputTampil.focus();
+                    inputTampil.select();
+                }
+                return false;
+            }
+
+            // Validasi Penjualan Kurang Bayar
+            if (jenis === "Penjualan" && bayar < total) {
+                alert(
+                    "Gagal menyimpan! Untuk transaksi Penjualan, jumlah bayar tidak boleh kurang dari total.");
+                if (inputTampil) {
+                    inputTampil.focus();
+                    inputTampil.select();
+                }
+                return false;
+            }
+
+            // Isi data ke template preview/print area
+            isiTemplatePrintArea();
+
+            const formData = new FormData(formTransaksi);
+
+            fetch("index.php?controller=transaksi&action=create", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if (modalPembayaran) modalPembayaran.hide();
+                    if (modalStruk) modalStruk.show();
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Terjadi kesalahan saat menyimpan transaksi.");
+                });
+        });
+    }
+
+
+    // ==========================================
+    // 8. AKSI TOMBOL MODAL STRUK (FIX TOMBOL MACET)
+    // ==========================================
+    // Gunakan Delegasi Event agar tombol selalu merespons kapan pun dipanggil
+    document.addEventListener("click", function(e) {
+
+        // A. Tombol Cetak Struk
+        if (e.target.closest("#btn_cetak_struk")) {
+            // Jalankan perintah print browser
+            window.print();
+
+            // Beri jeda sebentar agar proses print dikirim ke sistem sebelum reload halaman
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        }
+
+        // B. Tombol Selesai (Tanpa Cetak)
+        if (e.target.closest("#btn_selesai_tanpa_cetak")) {
+            window.location.reload();
+        }
+    });
+
+    // ==========================================
+    // 8. NAVIGASI ENTER GLOBAL 3 TAHAP
+    // ==========================================
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Enter" || e.keyCode === 13) {
+
+            if (document.activeElement.tagName === "TEXTAREA") return;
+
+            e.preventDefault();
+
+            const isModalPembayaranOpen = modalPembayaranEl && modalPembayaranEl.classList.contains(
+                "show");
+            const isModalStrukOpen = modalStrukEl && modalStrukEl.classList.contains("show");
+
+            if (!isModalPembayaranOpen && !isModalStrukOpen) {
+                // ENTER 1: Buka Modal Pembayaran
+                if (btnLanjut) btnLanjut.click();
+
+                setTimeout(function() {
+                    if (inputTampil) {
+                        inputTampil.focus();
+                        inputTampil.select();
+                    }
+                }, 300);
+
+            } else if (isModalPembayaranOpen) {
+                // ENTER 2: Submit Form via AJAX
+                if (formTransaksi) formTransaksi.requestSubmit();
+
+            } else if (isModalStrukOpen) {
+                // ENTER 3: Trigger Cetak Struk
+                if (btnCetak) btnCetak.click();
+            }
+        }
+    });
+
 });
 </script>
