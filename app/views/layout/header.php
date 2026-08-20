@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="assets/css/theme.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="assets/css/sidebar.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="assets/css/profil.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="assets/css/transaksi.css?v=<?= time(); ?>">
 
 </head>
 

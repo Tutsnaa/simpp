@@ -2,6 +2,63 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+// FILTER DATA TRANSAKSI
+document.addEventListener('DOMContentLoaded', function() {
+    // Ambil elemen input filter
+    const searchInput = document.getElementById('searchTransaksi');
+    const filterJenis = document.getElementById('filterJenis');
+    const filterPembayaran = document.getElementById('filterPembayaran');
+    const filterStatus = document.getElementById('filterStatus');
+
+    // Ambil seluruh baris data di dalam tbody
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    function applyFilter() {
+        const querySearch = searchInput.value.toLowerCase().trim();
+        const selectedJenis = filterJenis.value.toLowerCase().trim();
+        const selectedPembayaran = filterPembayaran.value.toLowerCase().trim();
+        const selectedStatus = filterStatus.value.toLowerCase().trim();
+
+        tableRows.forEach(row => {
+            // Abaikan jika baris tersebut adalah pesan "Belum ada transaksi"
+            if (row.children.length === 1) return;
+
+            // Ambil teks dari kolom yang relevan
+            const idTransaksi = row.children[1]?.textContent.toLowerCase().trim() || '';
+            const pelangganInfo = row.children[2]?.textContent.toLowerCase().trim() ||
+            ''; // Nama & No Telp
+            const jenisTransaksi = row.children[3]?.textContent.toLowerCase().trim() || '';
+            const statusPembayaran = row.children[5]?.textContent.toLowerCase().trim() || '';
+            const statusTransaksi = row.children[6]?.textContent.toLowerCase().trim() || '';
+
+            // Cek Pencarian Teks (ID, Pelanggan, atau No Telp)
+            const matchSearch = idTransaksi.includes(querySearch) || pelangganInfo.includes(
+            querySearch);
+
+            // Cek Dropdown Filter
+            const matchJenis = selectedJenis === '' || jenisTransaksi.includes(selectedJenis);
+            const matchPembayaran = selectedPembayaran === '' || statusPembayaran.includes(
+                selectedPembayaran);
+            const matchStatus = selectedStatus === '' || statusTransaksi.includes(selectedStatus);
+
+            // Tampilkan baris jika SEMUA kondisi terpenuhi, jika tidak sembunyikan
+            if (matchSearch && matchJenis && matchPembayaran && matchStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // Pasang Event Listener ke setiap input filter
+    if (searchInput) searchInput.addEventListener('input', applyFilter);
+    if (filterJenis) filterJenis.addEventListener('change', applyFilter);
+    if (filterPembayaran) filterPembayaran.addEventListener('change', applyFilter);
+    if (filterStatus) filterStatus.addEventListener('change', applyFilter);
+});
+
+// ----------------------------------------------------------------------------------------------------------------------
+
 let itemIndex = 0;
 let cartItems = {};
 
@@ -161,7 +218,7 @@ function aturJenisTransaksi() {
     // KEDUA BOX (KEMBALIAN & SISA) SELALU DITAMPILKAN
     document.getElementById("box_kembalian").style.display = "block";
     document.getElementById("box_sisa").style.display = isPenjualan ? "none" :
-    "block"; // Sisa bayar hanya aktif di Pemesanan
+        "block"; // Sisa bayar hanya aktif di Pemesanan
 
     // Atur Judul Modal
     document.getElementById("modal_title_text").innerText = isPenjualan ? "Pembayaran Direct POS" :

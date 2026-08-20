@@ -104,19 +104,24 @@ body {
 
 .product-img-wrapper {
   margin: 0 auto;
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1 / 1;
   background: #f1f4f3;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  box-sizing: border-box; /* Mencegah padding merusak ukuran */
 }
 
 .product-img-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block; /* Menghapus spasi/whitespace bawaan tag img */
+  margin: 0 auto; /* Menetralkan margin jika ada margin bawaan */
+  padding: 0; /* Menetralkan padding jika ada padding bawaan */
 }
 
 .product-info {

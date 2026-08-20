@@ -167,6 +167,8 @@
         </div>
 
         <?php require "modal_pembayaran.php"; ?>
+        <!-- Include Modal Struk -->
+        <?php include 'modal_struk.php'; ?>
         <?php require "script.php"; ?>
 
     </form>

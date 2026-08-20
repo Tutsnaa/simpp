@@ -20,7 +20,6 @@ $action = $_GET['action'] ?? 'index';
 
         <!-- Menu -->
         <ul class="nav flex-column menu">
-
             <li class="nav-item">
                 <a href="index.php?controller=dashboard&action=index"
                     class="nav-link <?= ($controller == 'dashboard') ? 'active' : ''; ?>">
@@ -28,12 +27,14 @@ $action = $_GET['action'] ?? 'index';
                 </a>
             </li>
 
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin'): ?>
             <li class="nav-item">
                 <a href="index.php?controller=data_pengguna&action=index"
                     class="nav-link <?= ($controller == 'data_pengguna' && $action == 'index') ? 'active' : ''; ?>">
                     Data Pengguna
                 </a>
             </li>
+            <?php endif; ?>
 
             <li class="nav-item">
                 <a href="index.php?controller=kategori&action=index"
