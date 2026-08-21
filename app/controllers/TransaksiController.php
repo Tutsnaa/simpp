@@ -28,7 +28,7 @@ class TransaksiController
         }
 
         $transaksi = $this->transaksiModel->getAll();
-        $barang    = $this->transaksiModel->getBarang();
+        $barang    = $this->barangModel->getAll();
 
         $title   = "Transaksi";
         $content = "app/views/transaksi/transaksi.php";
@@ -46,6 +46,27 @@ class TransaksiController
     public function create()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            // VALIDASI STOK SISI SERVER
+            if (isset($_POST["barang"]) && is_array($_POST["barang"])) {
+                foreach ($_POST["barang"] as $item) {
+                    $dataBarang = $this->barangModel->getById($item["id_barang"]);
+                    $stokTersedia = $dataBarang['jumlah'] ?? 0;
+
+                    // Jika jumlah dipesan melebihi stok yang ada
+                    if ($item["jumlah"] > $stokTersedia) {
+                        $pesan_error = "Transaksi gagal! Stok barang '" . ($dataBarang['nama_barang'] ?? 'Produk') . "' tidak mencukupi (Sisa stok: {$stokTersedia}).";
+                        $barang = $this->barangModel->getAll();
+                        require_once "app/views/transaksi/tambah_transaksi.php";
+                        return;
+                    }
+                }
+            } else {
+                $pesan_error = "Keranjang belanja masih kosong!";
+                $barang = $this->barangModel->getAll();
+                require_once "app/views/transaksi/tambah_transaksi.php";
+                return;
+            }
 
             $id_pengguna = $_SESSION["id_pengguna"] ?? 1;
             $jenis       = $_POST["jenis_transaksi"] ?? "Penjualan";
@@ -69,7 +90,7 @@ class TransaksiController
             $id_transaksi = $this->transaksiModel->create($data);
 
             // 2. Simpan detail barang & kurangi stok
-            if ($id_transaksi && isset($_POST["barang"]) && is_array($_POST["barang"])) {
+            if ($id_transaksi) {
                 foreach ($_POST["barang"] as $item) {
                     $detail = [
                         "id_transaksi" => $id_transaksi,
@@ -81,13 +102,16 @@ class TransaksiController
 
                     $this->detailModel->create($detail);
 
+                    // Pengurangan stok barang
                     if (method_exists($this->transaksiModel, 'kurangiStok')) {
                         $this->transaksiModel->kurangiStok($item["id_barang"], $item["jumlah"]);
+                    } elseif (method_exists($this->barangModel, 'kurangiStok')) {
+                        $this->barangModel->kurangiStok($item["id_barang"], $item["jumlah"]);
                     }
                 }
             }
 
-            // 3. Set pesan sukses
+            // 3. Set pesan sukses & ambil data barang terbaru
             $pesan_sukses = "Transaksi berhasil disimpan!";
             $barang       = $this->barangModel->getAll();
             
@@ -141,7 +165,6 @@ class TransaksiController
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $id = $_POST["id_transaksi"];
-            // Menyesuaikan name input dari modal_pelunasan.php
             $bayar = $_POST["bayar_pelunasan"] ?? $_POST["jumlah_bayar"] ?? 0;
             $metode = $_POST["metode_pembayaran"] ?? "Tunai";
 
@@ -151,12 +174,11 @@ class TransaksiController
             $sisa       = $transaksi["total"] - $totalBayar;
             
             if ($sisa < 0) {
-                $sisa = 0; // Menghindari sisa bernilai minus
+                $sisa = 0;
             }
 
             $status = ($sisa <= 0) ? "Lunas" : "DP";
 
-            // Eksekusi pelunasan di model
             if (method_exists($this->transaksiModel, 'pelunasan')) {
                 $this->transaksiModel->pelunasan($id, $totalBayar, $sisa, $status);
             }
@@ -190,22 +212,19 @@ class TransaksiController
             exit;
         }
 
-        $barang = $this->transaksiModel->getBarang();
+        $barang = $this->barangModel->getAll();
 
         require_once "app/views/transaksi/tambah_transaksi.php";
     }
 
-
     public function cetakLaporanPdf()
-{
-    // Mengambil tanggal filter jika ada
-    $tglAwal  = $_GET['tgl_awal'] ?? null;
-    $tglAkhir = $_GET['tgl_akhir'] ?? null;
+    {
+        $tglAwal  = $_GET['tgl_awal'] ?? null;
+        $tglAkhir = $_GET['tgl_akhir'] ?? null;
 
-    $transaksiModel = new TransaksiModel();
-    $dataTransaksi  = $transaksiModel->getLaporanSelesai($tglAwal, $tglAkhir);
+        $transaksiModel = new TransaksiModel();
+        $dataTransaksi  = $transaksiModel->getLaporanSelesai($tglAwal, $tglAkhir);
 
-    // Kirim data ke view PDF
-    require_once "app/views/transaksi/cetak_pdf.php";
-}
+        require_once "app/views/transaksi/cetak_pdf.php";
+    }
 }

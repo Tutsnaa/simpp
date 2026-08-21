@@ -133,17 +133,40 @@
 
                     <!-- GRID PRODUK -->
                     <div class="row g-3" id="product_container">
-                        <?php foreach($barang as $b): ?>
+                        <?php 
+                        // Urutkan array $barang: Stok > 0 di atas, Stok <= 0 di bawah
+                        usort($barang, function($a, $b) {
+                            $stokA = (int)($a['jumlah'] ?? 0);
+                            $stokB = (int)($b['jumlah'] ?? 0);
+
+                            if ($stokA <= 0 && $stokB > 0) return 1;  // $a habis, pindah ke bawah
+                            if ($stokA > 0 && $stokB <= 0) return -1; // $a ada stok, tetap di atas
+                            return 0;                                 // Urutan sama jika stok sama-sama ada/habis
+                        });
+
+                        foreach($barang as $b): 
+                            $stokBarang = (int)($b['jumlah'] ?? 0);
+                            $isOutOfStock = ($stokBarang <= 0);
+                        ?>
                         <div class="col-6 col-sm-4 col-md-3 item-produk"
                             data-nama="<?= strtolower($b['nama_barang']); ?>">
-                            <div class="product-card btn-add-cart" data-id="<?=$b['id_barang'];?>"
-                                data-nama="<?=$b['nama_barang'];?>" data-harga="<?=$b['harga_jual'];?>">
-
-                                <div class="product-img-wrapper">
+                            <div class="product-card btn-add-cart <?= $isOutOfStock ? 'disabled-card' : ''; ?>"
+                                data-id="<?=$b['id_barang'];?>" data-nama="<?=$b['nama_barang'];?>"
+                                data-harga="<?= (int)preg_replace('/[^0-9]/', '', $b['harga_jual']); ?>"
+                                data-stok="<?=$stokBarang;?>">
+                                <div class="product-img-wrapper position-relative">
                                     <?php if(!empty($b['foto'])): ?>
-                                    <img src="assets/img/barang/<?=$b['foto'];?>" alt="<?=$b['nama_barang'];?>">
+                                    <img src="assets/img/barang/<?=$b['foto'];?>" alt="<?=$b['nama_barang'];?>"
+                                        style="<?= $isOutOfStock ? 'opacity: 0.4;' : ''; ?>">
                                     <?php else: ?>
                                     <i class="fas fa-box fa-2x text-secondary opacity-50"></i>
+                                    <?php endif; ?>
+
+                                    <?php if($isOutOfStock): ?>
+                                    <span
+                                        class="position-absolute top-50 start-50 translate-middle badge bg-danger fs-6 shadow">
+                                        HABIS
+                                    </span>
                                     <?php endif; ?>
                                 </div>
 
@@ -155,6 +178,12 @@
                                     <span class="text-primary-custom fw-bold" style="font-size: 13px;">
                                         Rp <?=number_format($b['harga_jual'], 0, ',', '.');?>
                                     </span>
+
+                                    <div>
+                                        <span class="badge <?= $isOutOfStock ? 'bg-danger' : 'bg-secondary'; ?>">
+                                            Stok: <?=$stokBarang;?>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

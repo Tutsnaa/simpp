@@ -124,16 +124,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Tambah Barang Ke Keranjang
+    // Tambah Barang Ke Keranjang
     document.querySelectorAll(".btn-add-cart").forEach(function(element) {
         element.addEventListener("click", function() {
             let id = this.dataset.id;
             let nama = this.dataset.nama;
-            let harga = parseInt(this.dataset.harga);
+            let harga = parseInt(this.dataset.harga) || 0; // Pastikan konversi angka aman
+            let stok = parseInt(this.dataset.stok) || 0;
+
+            if (stok <= 0) {
+                alert("Stok barang ini telah habis!");
+                return;
+            }
 
             if (cartItems[id]) {
                 let row = document.getElementById("row_cart_" + id);
                 let inputQty = row.querySelector(".qty-input");
-                inputQty.value = parseInt(inputQty.value) + 1;
+                let currentQty = parseInt(inputQty.value) || 0;
+
+                if (currentQty + 1 > stok) {
+                    alert("Jumlah melebihi stok yang tersedia! Stok tersisa: " + stok);
+                    return;
+                }
+
+                inputQty.value = currentQty + 1;
                 updateRow(inputQty);
             } else {
                 cartItems[id] = true;
@@ -150,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>
                             <div class="qty-control">
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn-minus p-0 px-1"><i class="fas fa-minus small"></i></button>
-                                <input type="number" name="barang[${itemIndex}][jumlah]" class="qty-input" value="1" min="1">
+                                <input type="number" name="barang[${itemIndex}][jumlah]" class="qty-input" value="1" min="1" max="${stok}" data-stok="${stok}">
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn-plus p-0 px-1"><i class="fas fa-plus small"></i></button>
                             </div>
                         </td>
@@ -165,39 +179,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const cartBody = document.getElementById("cart_body");
                 if (cartBody) cartBody.insertAdjacentHTML("beforeend", html);
                 itemIndex++;
+
+                // Hitung ulang total langsung setelah menambah baris baru
+                hitungTotal();
             }
-            hitungTotal();
         });
     });
 
-    // Delegasi Event Plus, Minus, Hapus
-    document.addEventListener("click", function(e) {
-        if (e.target.closest(".btn-plus")) {
-            let input = e.target.closest("tr").querySelector(".qty-input");
-            input.value = parseInt(input.value) + 1;
-            updateRow(input);
-        }
-
-        if (e.target.closest(".btn-minus")) {
-            let input = e.target.closest("tr").querySelector(".qty-input");
-            if (parseInt(input.value) > 1) {
-                input.value = parseInt(input.value) - 1;
-                updateRow(input);
-            }
-        }
-
-        if (e.target.closest(".btn-hapus")) {
-            let btn = e.target.closest(".btn-hapus");
-            delete cartItems[btn.dataset.id];
-            btn.closest("tr").remove();
-            hitungTotal();
-        }
-    });
-
+    // Fungsi Hitung Subtotal Baris & Total Belanja
     function updateRow(input) {
         let row = input.closest("tr");
-        let harga = parseInt(row.querySelector("input[name*='[harga]']").value);
-        let qty = parseInt(input.value);
+        let hargaInput = row.querySelector("input[name*='[harga]']");
+        let harga = parseInt(hargaInput ? hargaInput.value : 0) || 0;
+        let qty = parseInt(input.value) || 1;
         let subtotal = harga * qty;
 
         row.querySelector(".subtotal").innerText = "Rp " + subtotal.toLocaleString('id-ID');
@@ -218,6 +212,68 @@ document.addEventListener('DOMContentLoaded', function() {
         if (inputTotal) inputTotal.value = total;
 
         hitungPembayaran();
+    }
+    // Delegasi Event Plus, Minus, Hapus & Manual Input Qty
+    document.addEventListener("click", function(e) {
+        if (e.target.closest(".btn-plus")) {
+            let input = e.target.closest("tr").querySelector(".qty-input");
+            let stok = parseInt(input.dataset.stok);
+            let currentVal = parseInt(input.value) || 0;
+
+            // Validasi Tombol Plus
+            if (currentVal + 1 > stok) {
+                alert("Jumlah melebihi stok yang tersedia! Stok tersisa: " + stok);
+                input.value = stok;
+            } else {
+                input.value = currentVal + 1;
+            }
+            updateRow(input);
+        }
+
+        if (e.target.closest(".btn-minus")) {
+            let input = e.target.closest("tr").querySelector(".qty-input");
+            let currentVal = parseInt(input.value) || 0;
+
+            if (currentVal > 1) {
+                input.value = currentVal - 1;
+                updateRow(input);
+            }
+        }
+
+        if (e.target.closest(".btn-hapus")) {
+            let btn = e.target.closest(".btn-hapus");
+            delete cartItems[btn.dataset.id];
+            btn.closest("tr").remove();
+            hitungTotal();
+        }
+    });
+
+    // Validasi saat user mengetik jumlah produk secara manual di input field
+    document.addEventListener("change", function(e) {
+        if (e.target.classList.contains("qty-input")) {
+            let input = e.target;
+            let stok = parseInt(input.dataset.stok);
+            let currentVal = parseInt(input.value) || 1;
+
+            if (currentVal > stok) {
+                alert("Jumlah melebihi stok yang tersedia! Stok tersisa: " + stok);
+                input.value = stok;
+            } else if (currentVal < 1) {
+                input.value = 1;
+            }
+            updateRow(input);
+        }
+    });
+
+    function updateRow(input) {
+        let row = input.closest("tr");
+        let harga = parseInt(row.querySelector("input[name*='[harga]']").value);
+        let qty = parseInt(input.value) || 1;
+        let subtotal = harga * qty;
+
+        row.querySelector(".subtotal").innerText = "Rp " + subtotal.toLocaleString('id-ID');
+        row.querySelector(".input-subtotal").value = subtotal;
+        hitungTotal();
     }
 
 
