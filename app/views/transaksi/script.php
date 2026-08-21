@@ -421,7 +421,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Validasi Penjualan Kurang Bayar
             if (jenis === "Penjualan" && bayar < total) {
                 alert(
-                    "Gagal menyimpan! Untuk transaksi Penjualan, jumlah bayar tidak boleh kurang dari total.");
+                    "Gagal menyimpan! Untuk transaksi Penjualan, jumlah bayar tidak boleh kurang dari total."
+                );
                 if (inputTampil) {
                     inputTampil.focus();
                     inputTampil.select();
@@ -452,7 +453,91 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // ==========================================
-    // 8. AKSI TOMBOL MODAL STRUK (FIX TOMBOL MACET)
+    // 8. PROSES SIMPAN AJAX & VALIDASI PELUNASAN
+    // ==========================================
+    document.querySelectorAll('.form-pelunasan').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const idTrx = this.querySelector('input[name="id_transaksi"]').value;
+            const total = parseFloat(this.querySelector('input[name="total_transaksi"]')
+                .value) || 0;
+            const dp = parseFloat(this.querySelector('input[name="dp_awal"]').value) || 0;
+            const sisaAwal = parseFloat(this.querySelector('input[name="sisa_awal"]').value) ||
+                0;
+            const pelanggan = this.querySelector('input[name="nama_pelanggan"]').value;
+            const bayar = parseFloat(this.querySelector('input[name="bayar_pelunasan"]')
+                .value) || 0;
+
+            if (bayar < sisaAwal) {
+                alert("Jumlah bayar kurang dari sisa tagihan pelunasan!");
+                return;
+            }
+
+            const kembali = bayar - sisaAwal;
+            const today = new Date().toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const fmt = (num) => "Rp " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+            // Fill Struk Preview Data
+            document.getElementById("pln_id_trx").innerText = "#TR" + String(idTrx).padStart(5,
+                '0');
+            document.getElementById("pln_tgl").innerText = today;
+            document.getElementById("pln_pelanggan").innerText = pelanggan;
+            document.getElementById("pln_total").innerText = fmt(total);
+            document.getElementById("pln_dp").innerText = fmt(dp);
+            document.getElementById("pln_sisa_tagihan").innerText = fmt(sisaAwal);
+            document.getElementById("pln_bayar").innerText = fmt(bayar);
+            document.getElementById("pln_kembali").innerText = fmt(kembali);
+
+            // Send Request via Fetch
+            fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Sembunyikan Modal Input Pelunasan
+                    const modalInputEl = this.closest('.modal');
+                    const modalInputObj = bootstrap.Modal.getInstance(modalInputEl);
+                    if (modalInputObj) modalInputObj.hide();
+
+                    // Tampilkan Modal Struk Pelunasan
+                    const modalStrukEl = document.getElementById('modalStrukPelunasan');
+                    const modalStrukObj = new bootstrap.Modal(modalStrukEl);
+                    modalStrukObj.show();
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Terjadi kesalahan saat menyimpan pelunasan.");
+                });
+        });
+    });
+
+    // Event Handler Tombol Cetak & Selesai pada Modal Struk Pelunasan
+    document.addEventListener("click", function(e) {
+        if (e.target.closest("#btn_cetak_pelunasan")) {
+            window.print();
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        }
+
+        if (e.target.closest("#btn_selesai_pelunasan")) {
+            window.location.reload();
+        }
+    });
+
+
+    // ==========================================
+    // 9. AKSI TOMBOL MODAL STRUK (FIX TOMBOL MACET)
     // ==========================================
     // Gunakan Delegasi Event agar tombol selalu merespons kapan pun dipanggil
     document.addEventListener("click", function(e) {
