@@ -17,45 +17,39 @@ class AuthController
         require_once "app/views/login/login.php";
     }
 
-
     // Proses login
     public function login()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $nama_pengguna = $_POST["nama_pengguna"];
-            $kata_sandi = $_POST["kata_sandi"];
-
+            $kata_sandi    = $_POST["kata_sandi"];
 
             $pengguna = $this->penggunaModel->getByNamaPengguna($nama_pengguna);
 
+            if ($pengguna && password_verify($kata_sandi, $pengguna["kata_sandi"])) {
 
-            if ($pengguna && $kata_sandi == $pengguna["kata_sandi"]) {
+    $_SESSION["id_pengguna"] = $pengguna["id_pengguna"];
+    $_SESSION["nama"]        = $pengguna["nama"];
+    $_SESSION["role"]        = $pengguna["role"];
+    $_SESSION["foto"]        = $pengguna["foto"];
 
-                session_start();
+    header("Location: index.php?controller=dashboard&action=index");
+    exit;
 
-                $_SESSION["id_pengguna"] = $pengguna["id_pengguna"];
-                $_SESSION["nama"] = $pengguna["nama"];
-                $_SESSION["role"] = $pengguna["role"];
+} else {
 
-
-                header("Location: index.php?controller=beranda&action=index");
-                exit;
-
-            } else {
-
-                echo "Nama pengguna atau kata sandi salah.";
-
-            }
+    echo "<script>
+            alert('Nama pengguna atau kata sandi salah.');
+            window.location='index.php?controller=auth&action=index';
+          </script>";
+}
         }
     }
-
 
     // Logout
     public function logout()
     {
-        session_start();
-
         session_destroy();
 
         header("Location: index.php?controller=auth&action=index");

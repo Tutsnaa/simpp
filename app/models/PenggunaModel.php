@@ -12,16 +12,25 @@ class PenggunaModel
         $this->db = $database->connect();
     }
 
+    /* ==========================================================
+     * DATA PENGGUNA
+     * ========================================================== */
+
     // Menampilkan seluruh data pengguna
     public function getAll()
     {
-        $query = $this->db->prepare("SELECT * FROM pengguna ORDER BY id_pengguna DESC");
+        $query = $this->db->prepare("
+            SELECT *
+            FROM pengguna
+            ORDER BY id_pengguna DESC
+        ");
+
         $query->execute();
 
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Menampilkan satu data berdasarkan ID
+    // Menampilkan satu data pengguna berdasarkan ID
     public function getById($id_pengguna)
     {
         $query = $this->db->prepare("
@@ -52,6 +61,10 @@ class PenggunaModel
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
+
+    /* ==========================================================
+     * CRUD START
+     * ========================================================== */
 
     // Menambah pengguna
     public function create($data)
@@ -116,7 +129,52 @@ class PenggunaModel
         ");
 
         return $query->execute([
-            ':id_pengguna' => $id_pengguna
+            ":id_pengguna" => $id_pengguna
         ]);
+    }
+
+    /* ==========================================================
+     * CRUD END
+     * ========================================================== */
+
+
+    /* ==========================================================
+     * PROFIL PENGGUNA
+     * ========================================================== */
+
+    // Mengubah profil pengguna
+    public function updateProfil($data)
+    {
+        $query = $this->db->prepare("
+            UPDATE pengguna
+            SET
+                foto = :foto,
+                nama = :nama,
+                email = :email,
+                no_telepon = :no_telepon,
+                alamat = :alamat,
+                nama_pengguna = :nama_pengguna
+            WHERE id_pengguna = :id_pengguna
+        ");
+
+        return $query->execute($data);
+    }
+
+
+    /* ==========================================================
+     * KEAMANAN AKUN
+     * ========================================================== */
+
+    // Mengubah kata sandi pengguna
+    public function ubahKataSandi($data)
+    {
+        $query = $this->db->prepare("
+            UPDATE pengguna
+            SET
+                kata_sandi = :kata_sandi
+            WHERE id_pengguna = :id_pengguna
+        ");
+
+        return $query->execute($data);
     }
 }

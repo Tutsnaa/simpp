@@ -1,0 +1,106 @@
+/* =======================
+   SIDEBAR
+======================= */
+
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 25px 20px;
+}
+
+/* =======================
+   PROFIL
+======================= */
+
+.sidebar .title {
+  color: var(--main-text-color);
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.sidebar .profile-img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--main-text-color);
+  margin: 0 auto 10px;
+  display: block;
+}
+
+.sidebar-title {
+  text-align: center;
+  color: var(--main-text-color);
+  margin-bottom: 25px;
+}
+
+.sidebar-title span {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* =======================
+   MENU
+======================= */
+
+.menu {
+  margin-top: 20px;
+}
+
+.menu .nav-item {
+  margin-bottom: 8px;
+}
+
+.sidebar .nav-link {
+  color: var(--main-text-color);
+  padding: 12px 18px;
+  border-radius: 10px;
+  text-align: left;
+  transition: 0.25s;
+  font-weight: 500;
+}
+
+.sidebar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--main-text-color);
+}
+
+.sidebar .nav-link.active {
+  background: var(--main-text-color);
+  color: var(--main-color);
+  font-weight: 600;
+}
+
+/* =======================
+   MENU BAWAH
+======================= */
+
+.sidebar-bottom {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 18px;
+}
+
+.sidebar-bottom .nav-item {
+  margin-bottom: 8px;
+}
+
+.sidebar-bottom .nav-link {
+  text-align: center;
+}
+
+/* Logout */
+
+.sidebar-bottom .nav-item:last-child .nav-link {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-bottom .nav-item:last-child .nav-link:hover {
+  background: var(--main-text-color);
+  color: var(--main-color);
+}

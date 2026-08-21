@@ -1,0 +1,63 @@
+/* ==========================
+   LOGIN PAGE
+========================== */
+
+body {
+  background: #f5f7f6;
+}
+
+/* Card Login */
+.card {
+  border-radius: 15px;
+}
+
+/* Judul SIMPP */
+.text-success-custom {
+  color: #2b5748;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+/* Label */
+.form-label {
+  font-weight: 600;
+  color: #444;
+}
+
+/* Input */
+.form-control {
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+  border-color: #2b5748;
+  box-shadow: 0 0 0 0.2rem rgba(43, 87, 72, 0.2);
+}
+
+/* Tombol Login */
+.btn-success-custom {
+  background: #2b5748;
+  color: #fff;
+  border: none;
+  height: 48px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-success-custom:hover {
+  background: #23473b;
+  color: #fff;
+}
+
+/* Alert */
+.alert {
+  border-radius: 8px;
+}
+
+/* Card Body */
+.card-body {
+  padding: 40px;
+}

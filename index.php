@@ -13,12 +13,35 @@ switch ($controller) {
         $controller = new AuthController();
         break;
 
-
-    case 'beranda':
-        require_once "app/controllers/BerandaController.php";
-        $controller = new BerandaController();
+    case 'dashboard':
+        require_once "app/controllers/DashboardController.php";
+        $controller = new DashboardController();
         break;
 
+    case 'pengguna':
+        require_once "app/controllers/PenggunaController.php";
+        $controller = new PenggunaController();
+        break;
+
+    case 'kategori':
+        require_once "app/controllers/KategoriController.php";
+        $controller = new KategoriController();
+        break;
+
+    case 'barang':
+        require_once "app/controllers/BarangController.php";
+        $controller = new BarangController();
+        break;
+
+    case 'transaksi':
+        require_once "app/controllers/TransaksiController.php";
+        $controller = new TransaksiController();
+        break;
+
+    case 'data_pengguna':
+        require_once "app/controllers/PenggunaController.php";
+        $controller = new PenggunaController();
+        break;
 
     default:
         die("Controller tidak ditemukan");
