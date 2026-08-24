@@ -16,26 +16,28 @@
     </div>
 
     <!-- Filter Data Transaksi -->
+    <!-- Filter Data Transaksi -->
     <div class="card border-0 shadow-sm mb-3">
         <div class="card-body p-3">
             <form method="GET" action="index.php">
                 <input type="hidden" name="controller" value="transaksi">
                 <input type="hidden" name="action" value="index">
 
-                <div class="row g-3">
-                    <!-- Search Input (Nama / ID Transaksi) -->
+                <!-- BARIS 1: Search, Tanggal & Tombol Aksi (Total 12 Kolom) -->
+                <div class="row g-2 mb-2">
+                    <!-- Search Input -->
                     <div class="col-lg-4 col-md-12">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0 text-muted">
                                 <i class="fas fa-search"></i>
                             </span>
                             <input type="text" id="searchTransaksi" class="form-control border-start-0 bg-light"
-                                placeholder="Cari ID transaksi, pelanggan, atau no telp...">
+                                placeholder="Cari ID, pelanggan, telp...">
                         </div>
                     </div>
 
                     <!-- Filter Tanggal Awal -->
-                    <div class="col-lg-3 col-md-4 col-6">
+                    <div class="col-lg-3 col-6">
                         <div class="input-group">
                             <span class="input-group-text bg-light text-muted">Awal</span>
                             <input type="date" name="tgl_awal" class="form-control bg-light"
@@ -44,7 +46,7 @@
                     </div>
 
                     <!-- Filter Tanggal Akhir -->
-                    <div class="col-lg-3 col-md-4 col-6">
+                    <div class="col-lg-3 col-6">
                         <div class="input-group">
                             <span class="input-group-text bg-light text-muted">Akhir</span>
                             <input type="date" name="tgl_akhir" class="form-control bg-light"
@@ -53,20 +55,23 @@
                     </div>
 
                     <!-- Tombol Aksi Filter & Reset -->
-                    <div class="col-lg-2 col-md-4 col-12 d-flex gap-2">
+                    <div class="col-lg-2 col-12 d-flex gap-1">
                         <button type="submit"
                             class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-1">
                             <span class="material-symbols-outlined">filter_alt</span> Filter
                         </button>
                         <?php if (!empty($_GET['tgl_awal']) || !empty($_GET['tgl_akhir'])): ?>
                         <a href="index.php?controller=transaksi&action=index"
-                            class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-1"
+                            class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
                             title="Reset Filter">
-                            <span class="material-symbols-outlined">restart_alt</span> Reset
+                            <span class="material-symbols-outlined">restart_alt</span>
                         </a>
                         <?php endif; ?>
                     </div>
+                </div>
 
+                <!-- BARIS 2: Dropdown Status & Jenis (Total 12 Kolom) -->
+                <div class="row g-2">
                     <!-- Filter Jenis Transaksi -->
                     <div class="col-lg-4 col-md-4 col-12">
                         <select id="filterJenis" class="form-select bg-light">
@@ -113,7 +118,7 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive" style="max-height: 400px; overflow: auto;">
+            <div class="table-responsive" style="max-height: 350px; overflow: auto;">
                 <table class="table table-hover align-middle text-nowrap mb-0" style="min-width: 1000px;">
                     <thead class="sticky-top table-success" style="z-index: 1;">
                         <tr class="text-center">
@@ -178,7 +183,7 @@
                                 <!-- HAPUS -->
                                 <a href="index.php?controller=transaksi&action=batal&id=<?= $row['id_transaksi']; ?>"
                                     onclick="return confirm('Batalkan transaksi ini?')" class="btn-aksi-hapus">
-                                    <span class="material-symbols-outlined">delete</span>
+                                    <span class="material-symbols-outlined">cancel</span>
                                 </a>
                             </td>
                         </tr>
