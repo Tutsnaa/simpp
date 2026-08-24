@@ -23,32 +23,20 @@ if (foto) {
 // Show / Hide Password
 // ==========================
 
-document.querySelectorAll(".toggle-password").forEach(function(button) {
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        const icon = this.querySelector('.material-symbols-outlined');
 
-    button.addEventListener("click", function() {
-
-        let target = document.getElementById(this.dataset.target);
-
-        let icon = this.querySelector("i");
-
-        if (target.type === "password") {
-
-            target.type = "text";
-
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.textContent = 'visibility_off'; // Mengubah ke ikon mata dicoret
         } else {
-
-            target.type = "password";
-
-            icon.classList.remove("fa-eye-slash");
-            icon.classList.add("fa-eye");
-
+            input.type = 'password';
+            icon.textContent = 'visibility'; // Mengubah ke ikon mata biasa
         }
-
     });
-
 });
 
 

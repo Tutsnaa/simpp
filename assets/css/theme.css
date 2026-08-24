@@ -208,3 +208,35 @@ body {
   line-height: 1;
   display: inline-block;
 }
+
+/* ==========================================
+   TOMBOL SELESAI (BTN-SELESAI)
+   ========================================== */
+.btn-selesai {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 40px;
+  padding: 0 16px !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  line-height: 1 !important;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid #6c757d;
+  background-color: #6c757d;
+  color: #ffffff !important;
+  cursor: pointer;
+  gap: 6px; /* Jarak otomatis jika ditambahi ikon */
+}
+
+.btn-selesai:hover {
+  background-color: #5c636a;
+  border-color: #565e64;
+  color: #ffffff !important;
+}
+
+.btn-selesai:focus {
+  box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.5);
+}

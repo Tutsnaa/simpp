@@ -72,8 +72,9 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn text-white fw-bold" style="background-color: #2b5748;">
+                    <button type="button" class="btn btn-selesai" data-bs-dismiss="modal">Batal</button>
+                    <!-- Tombol Simpan Pelunasan menggunakan kelas khusus agar tidak hijau terang -->
+                    <button type="submit" class="btn btn-simpan fw-bold text-white">
                         <i class="fas fa-check-circle me-1"></i> Simpan Pelunasan
                     </button>
                 </div>
@@ -110,9 +111,7 @@
                     </div>
 
                     <div class="struk-divider"></div>
-
                     <div class="text-center fw-bold">STRUK PELUNASAN</div>
-
                     <div class="struk-divider"></div>
 
                     <div class="my-1">
@@ -174,11 +173,15 @@
                 </div>
             </div>
 
+            <!-- FOOTER MODAL DENGAN KELAS KHUSUS -->
             <div class="modal-footer border-0 justify-content-center gap-2 bg-light rounded-bottom py-2">
-                <button type="button" class="btn btn-outline-secondary btn-sm px-3" id="btn_selesai_pelunasan">
-                    Selesai (Tanpa Cetak)
+                <!-- Tombol Selesai dengan kelas khusus .btn-struk-selesai -->
+                <button type="button" class="btn-struk-selesai" id="btn_selesai_tanpa_cetak">
+                    Selesai
                 </button>
-                <button type="button" class="btn btn-primary-custom btn-sm px-3 fw-bold" id="btn_cetak_pelunasan">
+
+                <!-- Tombol Cetak dengan kelas khusus .btn-struk-cetak -->
+                <button type="button" class="btn-struk-cetak" id="btn_cetak_struk">
                     <i class="fas fa-print me-1"></i> Cetak Struk
                 </button>
             </div>
@@ -187,7 +190,59 @@
     </div>
 </div>
 
+<!-- CSS KHUSUS TOMBOL & STRUK -->
 <style>
+/* --- KELAS KHUSUS TOMBOL SELESAI --- */
+.btn-struk-selesai {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 38px !important;
+    padding: 0 16px !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    border: 1px solid #ced4da !important;
+    background-color: #ffffff !important;
+    color: #495057 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.btn-struk-selesai:hover {
+    background-color: #f8f9fa !important;
+    border-color: #adb5bd !important;
+    color: #212529 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* --- KELAS KHUSUS TOMBOL CETAK STRUK --- */
+.btn-struk-cetak {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 38px !important;
+    padding: 0 18px !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    border: 1px solid #2b5748 !important;
+    background-color: #2b5748 !important;
+    color: #ffffff !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.btn-struk-cetak:hover {
+    background-color: #214337 !important;
+    border-color: #1c382f !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(43, 87, 72, 0.3) !important;
+}
+
+/* --- PENGATURAN STRUK & PRINT --- */
 .struk-divider {
     border-top: 1px dashed #333;
     margin: 6px 0;

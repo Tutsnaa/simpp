@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="assets/css/tambah_transaksi.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="assets/css/theme.css?v=<?= time(); ?>">
 
 </head>
 
@@ -147,20 +148,25 @@
                         foreach($barang as $b): 
                             $stokBarang = (int)($b['jumlah'] ?? 0);
                             $isOutOfStock = ($stokBarang <= 0);
+
+                            // Tentukan path foto (gunakan default jika kosong atau file tidak ditemukan)
+                            $fotoPath = 'assets/img/barang/' . $b['foto'];
+                            if (empty($b['foto']) || !file_exists($fotoPath)) {
+                                $fotoPath = 'assets/img/barang/default_produk2.png'; 
+                                // Catatan: Jika extension file default berupa .jpg / .png, silakan sesuaikan misal: 'assets/img/barang/default_produk2.png'
+                            }
                         ?>
                         <div class="col-6 col-sm-4 col-md-3 item-produk"
                             data-nama="<?= strtolower($b['nama_barang']); ?>">
-                            <div class="product-card btn-add-cart <?= $isOutOfStock ? 'disabled-card' : ''; ?>"
+                            <div class="product-card p-3 btn-add-cart <?= $isOutOfStock ? 'disabled-card' : ''; ?>"
                                 data-id="<?=$b['id_barang'];?>" data-nama="<?=$b['nama_barang'];?>"
                                 data-harga="<?= (int)preg_replace('/[^0-9]/', '', $b['harga_jual']); ?>"
                                 data-stok="<?=$stokBarang;?>">
                                 <div class="product-img-wrapper position-relative">
-                                    <?php if(!empty($b['foto'])): ?>
-                                    <img src="assets/img/barang/<?=$b['foto'];?>" alt="<?=$b['nama_barang'];?>"
+
+                                    <!-- Menampilkan Foto Produk atau Foto Default -->
+                                    <img src="<?=$fotoPath;?>" alt="<?=$b['nama_barang'];?>"
                                         style="<?= $isOutOfStock ? 'opacity: 0.4;' : ''; ?>">
-                                    <?php else: ?>
-                                    <i class="fas fa-box fa-2x text-secondary opacity-50"></i>
-                                    <?php endif; ?>
 
                                     <?php if($isOutOfStock): ?>
                                     <span

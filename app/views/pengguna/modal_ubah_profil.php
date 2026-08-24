@@ -8,7 +8,7 @@
                 <!-- Header -->
                 <div class="modal-header text-white" style="background:#2b5748;">
                     <h5 class="modal-title">
-                        <i class="fas fa-user-edit me-2"></i>Edit Profil
+                        <i class="fas fa-user-edit me-2"></i>Ubah Profil
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -86,15 +86,9 @@
 
                 <!-- Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-2"></i>Batal
-                    </button>
-                    <button type="reset" class="btn btn-warning">
-                        <i class="fas fa-rotate-left me-2"></i>Reset
-                    </button>
-                    <button type="submit" class="btn text-white" style="background:#2b5748;">
-                        <i class="fas fa-save me-2"></i>Simpan Perubahan
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+                    <button type="submit" class="btn text-white" style="background:#2b5748;">Simpan</button>
                 </div>
             </form>
         </div>

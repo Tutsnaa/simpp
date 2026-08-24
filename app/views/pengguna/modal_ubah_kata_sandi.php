@@ -26,7 +26,7 @@
                             <input type="password" class="form-control" id="passwordLama" name="password_lama" required>
                             <button class="btn btn-outline-secondary toggle-password" type="button"
                                 data-target="passwordLama">
-                                <i class="fas fa-eye"></i>
+                                <span class="material-symbols-outlined icon-eye">visibility</span>
                             </button>
                         </div>
                     </div>
@@ -39,21 +39,22 @@
                                 minlength="8" required>
                             <button class="btn btn-outline-secondary toggle-password" type="button"
                                 data-target="passwordBaru">
-                                <i class="fas fa-eye"></i>
+                                <span class="material-symbols-outlined icon-eye">visibility</span>
                             </button>
                         </div>
                         <small class="text-muted">Minimal 8 karakter.</small>
                     </div>
 
-                    <!-- Konfirmasi -->
+                    <!-- Konfirmasi Kata Sandi Baru -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Konfirmasi Kata Sandi Baru</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="konfirmasiPassword"
                                 name="konfirmasi_password" minlength="8" required>
-                            <button class="btn btn-outline-secondary toggle-password" type="button"
-                                data-target="konfirmasiPassword">
-                                <i class="fas fa-eye"></i>
+                            <button
+                                class="btn btn-outline-secondary toggle-password d-flex align-items-center justify-content-center"
+                                type="button" data-target="konfirmasiPassword">
+                                <span class="material-symbols-outlined icon-eye">visibility</span>
                             </button>
                         </div>
                     </div>
@@ -64,15 +65,9 @@
 
                 <!-- Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-2"></i>Batal
-                    </button>
-                    <button type="reset" class="btn btn-warning">
-                        <i class="fas fa-rotate-left me-2"></i>Reset
-                    </button>
-                    <button type="submit" class="btn text-white" style="background:#2b5748;">
-                        <i class="fas fa-save me-2"></i>Simpan Kata Sandi
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+                    <button type="submit" class="btn text-white" style="background:#2b5748;">Simpan Kata Sandi</button>
                 </div>
             </form>
         </div>
