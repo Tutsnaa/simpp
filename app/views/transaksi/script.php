@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterJenis = document.getElementById('filterJenis');
     const filterPembayaran = document.getElementById('filterPembayaran');
     const filterStatus = document.getElementById('filterStatus');
+    const filterTglAwal = document.getElementById('filterTglAwal');
+    const filterTglAkhir = document.getElementById('filterTglAkhir');
     const tableRows = document.querySelectorAll('tbody tr');
 
     function applyFilter() {
@@ -19,14 +21,35 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedPembayaran = filterPembayaran ? filterPembayaran.value.toLowerCase().trim() : '';
         const selectedStatus = filterStatus ? filterStatus.value.toLowerCase().trim() : '';
 
+        // Ambil nilai tanggal (Format HTML input date default: YYYY-MM-DD)
+        const valAwal = filterTglAwal ? filterTglAwal.value : '';
+        const valAkhir = filterTglAkhir ? filterTglAkhir.value : '';
+
         tableRows.forEach(row => {
-            if (row.children.length === 1) return;
+            // Abaikan baris kosong / header / no data
+            if (row.children.length <= 1) return;
+
+            // Pastikan INDEX (children[x]) SESUAI dengan urutan kolom TANGGAL di HTML <table> Anda!
+            // Contoh: Jika tanggal berada di kolom ke-5 (indeks 4)
+            const rawDateText = row.children[4]?.textContent.trim() || '';
 
             const idTransaksi = row.children[1]?.textContent.toLowerCase().trim() || '';
             const pelangganInfo = row.children[2]?.textContent.toLowerCase().trim() || '';
             const jenisTransaksiText = row.children[3]?.textContent.toLowerCase().trim() || '';
             const statusPembayaranText = row.children[5]?.textContent.toLowerCase().trim() || '';
             const statusTransaksiText = row.children[6]?.textContent.toLowerCase().trim() || '';
+
+            // Extract tanggal dari teks tabel menjadi format YYYY-MM-DD
+            let formattedRowDate = '';
+            if (rawDateText) {
+                const d = new Date(rawDateText);
+                if (!isNaN(d.getTime())) {
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    formattedRowDate = `${yyyy}-${mm}-${dd}`;
+                }
+            }
 
             const matchSearch = idTransaksi.includes(querySearch) || pelangganInfo.includes(
                 querySearch);
@@ -35,7 +58,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 selectedPembayaran);
             const matchStatus = selectedStatus === '' || statusTransaksiText.includes(selectedStatus);
 
-            if (matchSearch && matchJenis && matchPembayaran && matchStatus) {
+            // LOGIKA PERBANDINGAN RENTANG TANGGAL
+            let matchTanggal = true;
+            if (valAwal && valAkhir) {
+                matchTanggal = formattedRowDate >= valAwal && formattedRowDate <= valAkhir;
+            } else if (valAwal) {
+                matchTanggal = formattedRowDate >= valAwal;
+            } else if (valAkhir) {
+                matchTanggal = formattedRowDate <= valAkhir;
+            }
+
+            if (matchSearch && matchJenis && matchPembayaran && matchStatus && matchTanggal) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';
@@ -47,7 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (filterJenis) filterJenis.addEventListener('change', applyFilter);
     if (filterPembayaran) filterPembayaran.addEventListener('change', applyFilter);
     if (filterStatus) filterStatus.addEventListener('change', applyFilter);
-
+    if (filterTglAwal) filterTglAwal.addEventListener('change', applyFilter);
+    if (filterTglAkhir) filterTglAkhir.addEventListener('change', applyFilter);
 
     // ==========================================
     // 2. DEKLARASI ELEMEN POS & MODAL

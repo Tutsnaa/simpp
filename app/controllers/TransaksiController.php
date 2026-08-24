@@ -21,7 +21,7 @@ class TransaksiController
     }
 
     // =====================================================
-    // HALAMAN TRANSAKSI
+    // HALAMAN TRANSAKSI (DENGAN FILTER TANGGAL)
     // =====================================================
     public function index()
     {
@@ -30,9 +30,22 @@ class TransaksiController
             exit;
         }
 
-        $transaksi = $this->transaksiModel->getAll();
-        $barang    = $this->barangModel->getAll();
+        // Ambil filter tanggal dari parameter GET (URL)
+        $tgl_awal  = $_GET['tgl_awal'] ?? null;
+        $tgl_akhir = $_GET['tgl_akhir'] ?? null;
 
+        // Jika filter tanggal diisi, panggil method filter di Model
+        if (!empty($tgl_awal) && !empty($tgl_akhir)) {
+            if (method_exists($this->transaksiModel, 'getByFilterTanggal')) {
+                $transaksi = $this->transaksiModel->getByFilterTanggal($tgl_awal, $tgl_akhir);
+            } else {
+                $transaksi = $this->transaksiModel->getAll();
+            }
+        } else {
+            $transaksi = $this->transaksiModel->getAll();
+        }
+
+        $barang  = $this->barangModel->getAll();
         $title   = "Transaksi";
         $content = "app/views/transaksi/transaksi.php";
 
@@ -120,14 +133,6 @@ class TransaksiController
                         $this->barangModel->kurangiStok($item["id_barang"], $item["jumlah"]);
                     }
                 }
-
-            //     $_SESSION['flash_type']    = 'success';
-            //     $_SESSION['flash_message'] = 'Transaksi berhasil disimpan!';
-            //     $pesan_sukses = 'Transaksi berhasil disimpan!';
-            // } else {
-            //     $_SESSION['flash_type']    = 'danger';
-            //     $_SESSION['flash_message'] = 'Gagal menyimpan transaksi.';
-            //     $pesan_error = 'Gagal menyimpan transaksi.';
             }
 
             // 3. Ambil data barang terbaru
@@ -299,16 +304,18 @@ class TransaksiController
         require_once "app/views/transaksi/tambah_transaksi.php";
     }
 
+    // =====================================================
+    // CETAK LAPORAN PDF
+    // =====================================================
     public function cetakLaporanPdf()
     {
-        $tglAwal  = $_GET['tgl_awal'] ?? null;
-        $tglAkhir = $_GET['tgl_akhir'] ?? null;
+        // Ambil dari parameter URL (?tgl_awal=YYYY-MM-DD&tgl_akhir=YYYY-MM-DD)
+        $tglAwal  = isset($_GET['tgl_awal']) && !empty($_GET['tgl_awal']) ? $_GET['tgl_awal'] : null;
+        $tglAkhir = isset($_GET['tgl_akhir']) && !empty($_GET['tgl_akhir']) ? $_GET['tgl_akhir'] : null;
 
         $transaksiModel = new TransaksiModel();
         $dataTransaksi  = $transaksiModel->getLaporanSelesai($tglAwal, $tglAkhir);
 
         require_once "app/views/transaksi/cetak_pdf.php";
     }
-
-    
 }

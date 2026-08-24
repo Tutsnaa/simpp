@@ -120,11 +120,11 @@
         <thead>
             <tr>
                 <th width="5%">No</th>
-                <th width="12%">Kode Transaksi</th>
+                <th width="15%">Kode Transaksi</th>
+                <th width="15%">Tanggal</th>
                 <th width="20%">Pelanggan</th>
-                <th width="15%">Jenis</th>
-                <th width="15%">Metode Bayar</th>
-
+                <th width="6%">Jenis</th>
+                <th width="6%">Metode Bayar</th>
                 <th width="20%">Total</th>
             </tr>
         </thead>
@@ -135,14 +135,22 @@
             if (!empty($dataTransaksi)): 
                 foreach ($dataTransaksi as $row): 
                     $totalPendapatan += $row['total'];
+
+                    // Menggunakan nama kolom yang benar: tanggal_dibuat
+                    $rawTanggal = $row['tanggal_dibuat'] ?? null;
+                    if (!empty($rawTanggal) && strtotime($rawTanggal) !== false) {
+                        $tanggalFormatted = date('d-m-Y', strtotime($rawTanggal));
+                    } else {
+                        $tanggalFormatted = '-';
+                    }
             ?>
             <tr>
                 <td class="text-center"><?= $no++; ?></td>
                 <td class="text-center"><?= str_pad($row['id_transaksi'], 5, "0", STR_PAD_LEFT); ?></td>
+                <td class="text-center"><?= $tanggalFormatted; ?></td>
                 <td><?= htmlspecialchars($row['nama_pelanggan'] ?? 'Umum'); ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['jenis_transaksi']); ?></td>
                 <td class="text-center"><?= htmlspecialchars($row['metode_pembayaran']); ?></td>
-
                 <td class="text-right">Rp <?= number_format($row['total'], 0, ',', '.'); ?></td>
             </tr>
             <?php endforeach; ?>

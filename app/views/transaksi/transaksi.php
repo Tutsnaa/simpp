@@ -18,64 +18,95 @@
     <!-- Filter Data Transaksi -->
     <div class="card border-0 shadow-sm mb-3">
         <div class="card-body p-3">
-            <!-- Title Filter -->
-            <!-- <div class="d-flex align-items-center mb-3">
-                <span class="material-symbols-outlined text-success me-2">filter_alt</span>
-                <h5 class="fw-bold mb-0">Filter Data Transaksi</h5>
-            </div> -->
+            <form method="GET" action="index.php">
+                <input type="hidden" name="controller" value="transaksi">
+                <input type="hidden" name="action" value="index">
 
-            <!-- Form Grid Filter -->
-            <div class="row g-3">
-                <!-- Search Input (Nama / ID Transaksi) -->
-                <div class="col-lg-6 col-md-12">
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0 text-muted">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <input type="text" id="searchTransaksi" class="form-control border-start-0 bg-light"
-                            placeholder="Cari ID transaksi, pelanggan, atau no telp...">
+                <div class="row g-3">
+                    <!-- Search Input (Nama / ID Transaksi) -->
+                    <div class="col-lg-4 col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" id="searchTransaksi" class="form-control border-start-0 bg-light"
+                                placeholder="Cari ID transaksi, pelanggan, atau no telp...">
+                        </div>
+                    </div>
+
+                    <!-- Filter Tanggal Awal -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">Awal</span>
+                            <input type="date" name="tgl_awal" class="form-control bg-light"
+                                value="<?= $_GET['tgl_awal'] ?? '' ?>">
+                        </div>
+                    </div>
+
+                    <!-- Filter Tanggal Akhir -->
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">Akhir</span>
+                            <input type="date" name="tgl_akhir" class="form-control bg-light"
+                                value="<?= $_GET['tgl_akhir'] ?? '' ?>">
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi Filter & Reset -->
+                    <div class="col-lg-2 col-md-4 col-12 d-flex gap-2">
+                        <button type="submit"
+                            class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-1">
+                            <span class="material-symbols-outlined">filter_alt</span> Filter
+                        </button>
+                        <?php if (!empty($_GET['tgl_awal']) || !empty($_GET['tgl_akhir'])): ?>
+                        <a href="index.php?controller=transaksi&action=index"
+                            class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-1"
+                            title="Reset Filter">
+                            <span class="material-symbols-outlined">restart_alt</span> Reset
+                        </a>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Filter Jenis Transaksi -->
+                    <div class="col-lg-4 col-md-4 col-12">
+                        <select id="filterJenis" class="form-select bg-light">
+                            <option value="">Semua Jenis</option>
+                            <option value="Penjualan">Penjualan</option>
+                            <option value="Pemesanan">Pemesanan</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Status Pembayaran -->
+                    <div class="col-lg-4 col-md-4 col-12">
+                        <select id="filterPembayaran" class="form-select bg-light">
+                            <option value="">Status Bayar</option>
+                            <option value="Belum Bayar">Belum Bayar</option>
+                            <option value="DP">DP</option>
+                            <option value="Lunas">Lunas</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Status Transaksi -->
+                    <div class="col-lg-4 col-md-4 col-12">
+                        <select id="filterStatus" class="form-select bg-light">
+                            <option value="">Status Transaksi</option>
+                            <option value="Diproses">Diproses</option>
+                            <option value="Selesai">Selesai</option>
+                            <option value="Dibatalkan">Dibatalkan</option>
+                        </select>
                     </div>
                 </div>
-
-                <!-- Filter Jenis Transaksi -->
-                <div class="col-lg-2 col-md-4 col-12">
-                    <select id="filterJenis" class="form-select bg-light">
-                        <option value="">Semua Jenis</option>
-                        <option value="Penjualan">Penjualan</option>
-                        <option value="Pemesanan">Pemesanan</option>
-                    </select>
-                </div>
-
-                <!-- Filter Status Pembayaran -->
-                <div class="col-lg-2 col-md-4 col-12">
-                    <select id="filterPembayaran" class="form-select bg-light">
-                        <option value="">Status Bayar</option>
-                        <option value="Belum Bayar">Belum Bayar</option>
-                        <option value="DP">DP</option>
-                        <option value="Lunas">Lunas</option>
-                    </select>
-                </div>
-
-                <!-- Filter Status Transaksi -->
-                <div class="col-lg-2 col-md-4 col-12">
-                    <select id="filterStatus" class="form-select bg-light">
-                        <option value="">Status Transaksi</option>
-                        <option value="Diproses">Diproses</option>
-                        <option value="Selesai">Selesai</option>
-                        <option value="Dibatalkan">Dibatalkan</option>
-                    </select>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
     <!-- TABLE TRANSAKSI -->
     <div class="card shadow-sm border-0">
-        <!-- class border-0 ditaruh di sini agar garis pembatas di bawah tombol PDF hilang -->
         <div class="card-header bg-white border-0 pt-3 pb-0">
             <h5 class="mb-0 d-flex align-items-center gap-3">
-                <a href="index.php?controller=transaksi&action=cetakLaporanPdf" target="_blank"
-                    class="btn btn-sm text-white" style="background-color: #2b5748;">
+                <!-- Tombol Unduh PDF membawa parameter Tanggal jika difilter -->
+                <a href="index.php?controller=transaksi&action=cetakLaporanPdf&tgl_awal=<?= $_GET['tgl_awal'] ?? '' ?>&tgl_akhir=<?= $_GET['tgl_akhir'] ?? '' ?>"
+                    target="_blank" class="btn btn-sm text-white" style="background-color: #2b5748;">
                     <i class="fas fa-file-pdf me-1"></i> Unduh PDF
                 </a>
             </h5>

@@ -255,8 +255,8 @@ public function getTransaksiTerbaru($limit = 5)
 
         // Filter opsional berdasarkan rentang tanggal
         if (!empty($tglAwal) && !empty($tglAkhir)) {
-            $sql .= " AND DATE(t.created_at) BETWEEN :tglAwal AND :tglAkhir";
-            $params[':tglAwal'] = $tglAwal;
+            $sql .= " AND DATE(t.tanggal_dibuat) BETWEEN :tglAwal AND :tglAkhir";
+            $params[':tglAwal']  = $tglAwal;
             $params[':tglAkhir'] = $tglAkhir;
         }
 
@@ -267,4 +267,21 @@ public function getTransaksiTerbaru($limit = 5)
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getByFilterTanggal($tgl_awal, $tgl_akhir)
+{
+    $sql = "SELECT t.*, p.nama 
+            FROM transaksi t
+            JOIN pengguna p ON t.id_pengguna = p.id_pengguna
+            WHERE DATE(t.tanggal_dibuat) BETWEEN :tgl_awal AND :tgl_akhir
+            ORDER BY t.id_transaksi DESC";
+
+    $query = $this->db->prepare($sql);
+    $query->execute([
+        ':tgl_awal'  => $tgl_awal,
+        ':tgl_akhir' => $tgl_akhir
+    ]);
+
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
 }
