@@ -1,5 +1,4 @@
 <div class="container-fluid">
-
     <div class="card shadow border-0 mb-3">
         <div class="card-body d-flex justify-content-between align-items-center">
             <div>

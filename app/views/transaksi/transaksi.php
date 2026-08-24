@@ -145,8 +145,8 @@
                                 <?php endif; ?>
 
                                 <!-- HAPUS -->
-                                <a href="index.php?controller=transaksi&action=delete&id=<?= $row['id_transaksi']; ?>"
-                                    onclick="return confirm('Hapus transaksi ini?')" class="btn-aksi-hapus">
+                                <a href="index.php?controller=transaksi&action=batal&id=<?= $row['id_transaksi']; ?>"
+                                    onclick="return confirm('Batalkan transaksi ini?')" class="btn-aksi-hapus">
                                     <span class="material-symbols-outlined">delete</span>
                                 </a>
                             </td>

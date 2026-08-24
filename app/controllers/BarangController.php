@@ -8,6 +8,10 @@ class BarangController
 
     public function __construct()
     {
+        // Pastikan session aktif untuk menyimpan flash message
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->barangModel = new BarangModel();
     }
 
@@ -72,7 +76,15 @@ class BarangController
                 "status"      => $status
             ];
 
-            $this->barangModel->create($data);
+            $simpan = $this->barangModel->create($data);
+
+            if ($simpan) {
+                $_SESSION['flash_type']    = 'success';
+                $_SESSION['flash_message'] = 'Barang berhasil ditambahkan.';
+            } else {
+                $_SESSION['flash_type']    = 'danger';
+                $_SESSION['flash_message'] = 'Gagal menambahkan data barang.';
+            }
 
             header("Location: index.php?controller=barang&action=index");
             exit;
@@ -122,7 +134,15 @@ class BarangController
                 "status"      => $status
             ];
 
-            $this->barangModel->update($data);
+            $update = $this->barangModel->update($data);
+
+            if ($update) {
+                $_SESSION['flash_type']    = 'success';
+                $_SESSION['flash_message'] = 'Data barang berhasil diubah.';
+            } else {
+                $_SESSION['flash_type']    = 'danger';
+                $_SESSION['flash_message'] = 'Gagal mengubah data barang.';
+            }
 
             header("Location: index.php?controller=barang&action=index");
             exit;
@@ -136,12 +156,20 @@ class BarangController
             $id_barang = $_GET["id"];
             $barang    = $this->barangModel->getById($id_barang);
 
-            // Menghapus foto barang
+            // Menghapus foto barang jika ada
             if (!empty($barang["foto"]) && file_exists("assets/img/barang/" . $barang["foto"])) {
                 unlink("assets/img/barang/" . $barang["foto"]);
             }
 
-            $this->barangModel->delete($id_barang);
+            $hapus = $this->barangModel->delete($id_barang);
+
+            if ($hapus) {
+                $_SESSION['flash_type']    = 'success';
+                $_SESSION['flash_message'] = 'Barang berhasil dihapus.';
+            } else {
+                $_SESSION['flash_type']    = 'danger';
+                $_SESSION['flash_message'] = 'Gagal menghapus barang.';
+            }
         }
 
         header("Location: index.php?controller=barang&action=index");

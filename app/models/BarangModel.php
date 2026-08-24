@@ -169,4 +169,15 @@ public function getStokMenipis()
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+public function tambahStok($id_barang, $jumlah)
+{
+    // Ganti $this->conn menjadi $this->db (atau properti koneksi yang sesuai di BarangModel Anda)
+    $query = "UPDATE barang SET jumlah = jumlah + :jumlah WHERE id_barang = :id_barang";
+    $stmt  = $this->db->prepare($query); 
+    return $stmt->execute([
+        'jumlah'    => $jumlah,
+        'id_barang' => $id_barang
+    ]);
+}
 }

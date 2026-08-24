@@ -12,6 +12,9 @@ class TransaksiController
 
     public function __construct()
     {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->transaksiModel = new TransaksiModel();
         $this->detailModel    = new DetailTransaksiModel();
         $this->barangModel    = new BarangModel();
@@ -56,6 +59,10 @@ class TransaksiController
                     // Jika jumlah dipesan melebihi stok yang ada
                     if ($item["jumlah"] > $stokTersedia) {
                         $pesan_error = "Transaksi gagal! Stok barang '" . ($dataBarang['nama_barang'] ?? 'Produk') . "' tidak mencukupi (Sisa stok: {$stokTersedia}).";
+                        
+                        $_SESSION['flash_type']    = 'danger';
+                        $_SESSION['flash_message'] = $pesan_error;
+
                         $barang = $this->barangModel->getAll();
                         require_once "app/views/transaksi/tambah_transaksi.php";
                         return;
@@ -63,6 +70,10 @@ class TransaksiController
                 }
             } else {
                 $pesan_error = "Keranjang belanja masih kosong!";
+                
+                $_SESSION['flash_type']    = 'warning';
+                $_SESSION['flash_message'] = $pesan_error;
+
                 $barang = $this->barangModel->getAll();
                 require_once "app/views/transaksi/tambah_transaksi.php";
                 return;
@@ -109,11 +120,18 @@ class TransaksiController
                         $this->barangModel->kurangiStok($item["id_barang"], $item["jumlah"]);
                     }
                 }
+
+            //     $_SESSION['flash_type']    = 'success';
+            //     $_SESSION['flash_message'] = 'Transaksi berhasil disimpan!';
+            //     $pesan_sukses = 'Transaksi berhasil disimpan!';
+            // } else {
+            //     $_SESSION['flash_type']    = 'danger';
+            //     $_SESSION['flash_message'] = 'Gagal menyimpan transaksi.';
+            //     $pesan_error = 'Gagal menyimpan transaksi.';
             }
 
-            // 3. Set pesan sukses & ambil data barang terbaru
-            $pesan_sukses = "Transaksi berhasil disimpan!";
-            $barang       = $this->barangModel->getAll();
+            // 3. Ambil data barang terbaru
+            $barang = $this->barangModel->getAll();
             
             require_once "app/views/transaksi/tambah_transaksi.php";
             return;
@@ -147,10 +165,18 @@ class TransaksiController
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            $this->transaksiModel->updateStatus(
+            $update = $this->transaksiModel->updateStatus(
                 $_POST["id_transaksi"],
                 $_POST["status_transaksi"]
             );
+
+            if ($update) {
+                $_SESSION['flash_type']    = 'success';
+                $_SESSION['flash_message'] = 'Status transaksi berhasil diperbarui.';
+            } else {
+                $_SESSION['flash_type']    = 'danger';
+                $_SESSION['flash_message'] = 'Gagal memperbarui status transaksi.';
+            }
 
             header("Location: index.php?controller=transaksi&action=index");
             exit;
@@ -164,8 +190,8 @@ class TransaksiController
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            $id = $_POST["id_transaksi"];
-            $bayar = $_POST["bayar_pelunasan"] ?? $_POST["jumlah_bayar"] ?? 0;
+            $id     = $_POST["id_transaksi"];
+            $bayar  = $_POST["bayar_pelunasan"] ?? $_POST["jumlah_bayar"] ?? 0;
             $metode = $_POST["metode_pembayaran"] ?? "Tunai";
 
             $transaksi  = $this->transaksiModel->getById($id);
@@ -181,6 +207,12 @@ class TransaksiController
 
             if (method_exists($this->transaksiModel, 'pelunasan')) {
                 $this->transaksiModel->pelunasan($id, $totalBayar, $sisa, $status);
+                
+                $_SESSION['flash_type']    = 'success';
+                $_SESSION['flash_message'] = 'Pembayaran pelunasan berhasil diproses.';
+            } else {
+                $_SESSION['flash_type']    = 'danger';
+                $_SESSION['flash_message'] = 'Gagal memproses pelunasan.';
             }
 
             header("Location: index.php?controller=transaksi&action=index");
@@ -193,16 +225,65 @@ class TransaksiController
     // ==============================
     public function delete()
     {
-        $id = $_GET["id"];
+        if (isset($_GET["id"])) {
+            $id = $_GET["id"];
 
-        $this->detailModel->deleteByTransaksi($id);
-        $this->transaksiModel->delete($id);
+            $this->detailModel->deleteByTransaksi($id);
+            $hapus = $this->transaksiModel->delete($id);
+
+            if ($hapus) {
+                $_SESSION['flash_type']    = 'success';
+                $_SESSION['flash_message'] = 'Data transaksi berhasil dihapus.';
+            } else {
+                $_SESSION['flash_type']    = 'danger';
+                $_SESSION['flash_message'] = 'Gagal menghapus data transaksi.';
+            }
+        }
 
         header("Location: index.php?controller=transaksi&action=index");
         exit;
     }
 
-    
+    // ==============================
+    // BATAL TRANSAKSI
+    // ==============================
+    public function batal()
+    {
+        if (isset($_GET["id"])) {
+            $id = $_GET["id"];
+
+            // 1. Ambil detail barang dari transaksi ini
+            $detailItems = $this->detailModel->getByTransaksi($id);
+
+            // 2. Kembalikan stok barang yang dibatalkan
+            if (!empty($detailItems)) {
+                foreach ($detailItems as $item) {
+                    $id_barang = $item['id_barang'];
+                    $jumlah    = $item['jumlah'];
+
+                    // Panggil fungsi tambahStok pada BarangModel
+                    if (method_exists($this->barangModel, 'tambahStok')) {
+                        $this->barangModel->tambahStok($id_barang, $jumlah);
+                    }
+                }
+            }
+
+            // 3. Ubah status transaksi menjadi 'Dibatalkan'
+            $updated = $this->transaksiModel->updateStatus($id, 'Dibatalkan');
+
+            if ($updated) {
+                $_SESSION['flash_type']    = 'warning';
+                $_SESSION['flash_message'] = 'Transaksi berhasil dibatalkan dan stok barang telah dikembalikan.';
+            } else {
+                $_SESSION['flash_type']    = 'danger';
+                $_SESSION['flash_message'] = 'Gagal memproses pembatalan transaksi.';
+            }
+        }
+
+        header("Location: index.php?controller=transaksi&action=index");
+        exit;
+    }
+
     // =====================================================
     // HALAMAN TAMBAH TRANSAKSI KASIR
     // =====================================================
@@ -228,4 +309,6 @@ class TransaksiController
 
         require_once "app/views/transaksi/cetak_pdf.php";
     }
+
+    
 }
